@@ -1,0 +1,261 @@
+\documentclass[11pt, notitlepage]{report}
+
+	\usepackage[margin=1in]{geometry}
+	\usepackage{amsmath,amsthm,amssymb,amsfonts}
+	\usepackage{enumitem}
+	
+	\newcommand{\N}{\mathbb{N}}
+	\newcommand{\Z}{\mathbb{Z}}
+	\newcommand{\R}{\mathbb{R}}
+	\newcommand{\A}{\alpha}
+	\usepackage[parfill]{parskip}
+	\usepackage{mathtools}
+	\newenvironment{solution}{\paragraph{\small Solution:}}{\hfill}
+	\newenvironment{theorem}{\paragraph{Theorem:}}{\hfill}
+	\newenvironment{definition}{\paragraph{Definition:}}{\hfill}
+	\newenvironment{problem}[2][Problem]{\begin{trivlist}
+	\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+	
+	\usepackage{pgfplots}
+	\usetikzlibrary{arrows}
+	\usetikzlibrary{decorations.markings}
+	\usetikzlibrary{datavisualization}
+	\usetikzlibrary{datavisualization.formats.functions}
+	%\usepackage{pstricks-add}
+
+	\pgfplotsset{every axis/.append style={
+	                   axis x line=middle,    % put the x axis in the middle
+	                   axis y line=middle,    % put the y axis in the middle
+	                   axis line style={<->,color=gray}, % arrows on the axis
+	                   xlabel={$x$},          % default put x on x-axis
+	                   ylabel={$y$},          % default put y on y-axis
+	           }}
+	\pgfplotsset{compat=1.15}
+	
+	\newcommand{\pgraph}[4]{
+		\begin{center}
+		
+		\begin{tikzpicture}
+		\begin{axis}[
+		   trig format plots=rad,
+		   axis equal,
+		   grid=both
+		]
+		\addplot [domain=#3:#4, variable=\t, samples=50, black, decoration={
+		   markings,
+		   mark=between positions 0.2 and 1 step 4em with {\arrow [scale=1.5]{stealth}}
+		   }, postaction=decorate]
+		({#1}, {#2});
+		
+		\end{axis}
+		\end{tikzpicture}
+		
+		\end{center}
+	}
+
+
+   \newcommand{\cgraph}[3]{
+	   \begin{center}
+	
+	   \begin{tikzpicture}
+	   \begin{axis}[
+	       trig format plots=rad,
+	       axis equal,
+	       grid=both
+	   ]
+	   \addplot [domain=#2:#3, variable=\x, samples=50, black, decoration={
+	       markings,
+	       mark=between positions 0.2 and 1 step 4em with {\arrow [scale=1.5]{stealth}}
+	       }, postaction=decorate]
+	   {#1};
+	
+	   \end{axis}
+	   \end{tikzpicture}
+	
+	   \end{center}
+	}
+
+
+	
+	\makeatletter
+	\newcommand*{\toccontents}{\@starttoc{toc}}
+	\makeatother
+
+
+\begin{document}
+   \title{CS 70: Lecture 3 Notes}
+   \author{Abhijay Bhatnagar}
+   \maketitle
+   \toccontents
+
+
+
+\setcounter{secnumdepth}{0} %% no numbering
+\section{Proof By Induction}
+
+Goal: Prove $(\forall n \in \N) P(n)$
+
+e.g. \[
+(\forall n\in\N) \sum_{i=0}^{n}i = \frac{n(n+1)}{n}
+\]
+
+\textbf{Method: }
+
+- Prove $P(o)$ (Base case)
+
+- For arbitrary $k >= 0$, prove $p(k) \implies p(k+1)$, therefore $(\forall n\in\N)P(n) holds)$
+
+\textbf{Induction hypothesis:}
+
+Assume P(k), prove P(k+1)
+
+\begin{theorem}
+\[
+	(\forall n\in\N) \sum_{i=1}^{\infty}i = \frac{n(n+1)}{n}
+\]
+
+\begin{proof}
+	By induction on n:
+	
+	Base case: $P(o): \sum_{i=0}^{n} = 0$
+	
+	Induction step: For arbitrary k>= 0, assume P(k): sum i=0 to k i = k(k+1)/2
+	
+	Prove P(k+1): 
+	\[\sum_{i = 0}^{ k+1 }  = \sum_{i=o}^{k} + (k+1 )
+	
+	= k(k+1)/2 + (k+1)
+	
+	= (k+1)(k+2)/2
+	
+	Hence p(k \implies p(k+1) for all k>=0, hence \forall n P(n) by induction
+	
+\end{proof}
+
+\end{theorem}
+
+\begin{theorem}
+	For all $n>= 3$, the sum of the interior angles of a polygon with n sides is exactly (n-2)\pi
+	
+	\begin{proof}
+		By induction on n.
+		
+		Base: n= 3 \implies sum of angles = (3-2)\pi
+		
+		Ind. step: assume it holds for any k-gon (k-arbitrary). Prove for (k+1)-gon.
+		
+		Given any (k+1)-gon, cut off a triangle with a diagonal
+		
+		Angle sum = (angle sum of a triangle) + (angle sum of a k-gon)
+				  = \pi + (k-2)\pi (using p(k)}
+				  = ((k+1)-2)\pi
+	\end{proof}
+	
+	Note: avoid common mistake of going from k-gon to k+1-gon, you should go backwards (from k+1-gon to k-gon, because that's necessary to prove the arbitrary k+1)
+	
+
+\end{theorem}
+
+\section{Strengthening the hypothesis}
+
+\begin{theorem}
+	\[\forall n gte 1, \sum_{i=1}^{n} \frac{1}{i^2} \leq 2\]
+	
+	\begin{proof} By induction on n:
+	
+	Base: n=1:  \[\sum_{i=1}^{1} \frac{1}{i^2} == 1 \leq 2 \](True)
+	
+	Ind. Step: for arbitrary k, assume \[ \sum_{i=1}^{k} \frac{1}{i^2} \leq 2\]
+	
+	Prove same for k+1
+	
+	\[\sum_{i=1}^{k+1} \frac{1}{i^2} = \sum_{i=1}^{k} \frac{1}{i^2} + \frac{1}{(k+1)^2} \leq 2 + \frac{1}{(k+1)^2}\]
+	
+	This doesn't work.
+		
+	\end{proof}
+\end{theorem}
+
+\begin{theorem}
+
+	\[\forall n gte 1, \sum_{i=1}^{n} \frac{1}{i^2} \leq 2 - 1/n\]
+	
+	\begin{proof} By induction on n:
+	
+	Base: n=1:  \[\sum_{i=1}^{1} \frac{1}{i^2} == 1 \leq 2 -1 (True)\]
+	
+	Ind. Step: for arbitrary k, assume \[\sum_{i=1}^{k} \frac{1}{i^2} \leq 2 - \frac{1}{k}\]
+	
+	Prove same for k+1
+	
+	\[\sum_{i=1}^{k+1} \frac{1}{i^2} = \sum_{i=1}^{k} \frac{1}{i^2} + \frac{1}{(k+1)^2} \leq 2 - \frac{1}{k} + \frac{1}{(k+1)^2}\]
+
+	Need: \[2-\frac{1}{k}+\frac{1}{(k+1)^2} \leq 2 - \frac{1}{k+1}\]
+	
+	Algebraic exercise.
+	
+	\[-\frac{1}{k}+\frac{1}{k+1} \leq 0\]
+	
+	Note: You can strengthen an induction proof by trying to prove a stronger claim, because you can use that stronger assumption in your inductive step.
+	
+	\end{proof}
+	
+\end{theorem}
+
+\begin{theorem}
+	Any $2^n$ x $2^n$ chessboard can be tiled with L-shaped tiles, leaving exactly one hole adjacent to center.
+	
+	\textbf{Exercise}: $\forall n\geq 1, 3 | (2^{2n} - 1)$ 
+	
+	\begin{proof}
+		Take an arbitrary $2^{k+1} $  x $ 2^{k}$ board, and chop it in a quarter, and each of those. This leaves 4 holes in each of the quarter centers. We strengthen our claim by changing the phrase "in the center" to "any desired location"
+		
+		Note: it is important to write "by the induction hypothesis, we can tile all four sub-boards with their desired hole positions"
+	\end{proof}
+\end{theorem}
+
+\section{Strong Induction}
+
+May as well assume all of $P(0),...,P(k)$ when proving $P(k+1)$ (consider domino visualization)
+
+\begin{theorem}
+	Every n>1 can be written as a product of primes.
+	
+	\begin{proof}
+		Induction on n.
+		
+		Base: n=2: 2 is already a prime, trivial.
+		
+		Induction step: Assume for all integers $1<n\leq k$
+		
+		case i: k+1 is prime, trivially true
+		case ii: k+1 is not prime, then by definition $k+1 = a\cdot b \text{for some} 1< a,b < k+1$
+		
+		By strong induction hypothesis, both a \& b are products of prime. 
+	\end{proof}
+\end{theorem}
+
+\section{Fibonacci Numbers}
+
+\begin{definition}
+	F(0)=0 \\
+	F(1)=1 \\
+	F(n) = F(n-1)+F(n-2) \forall n \geq 2 \\
+	0,1,1,2,3,5,8,13,21,...
+\end{definition}
+
+\begin{theorem}
+	For all $n\in\N, F(n) = \frac{\phi^n-\psi^n}{\sqrt{5}}$
+	
+	Where: \phi = \frac{1+\sqrt{5}}{2}
+	Where: \psi = \frac{1-\sqrt{5}}{2}
+	
+	Corollary: For large n, $F(n) \approx \frac{1}{\sqrt{5}}\phi^n=\frac{1}{\sqrt{5}}(1.618...)^n$
+	
+	$F(n+1)/F(n) \rightarrow \phi \text{ as n } \rightarrow \infty$
+	
+	Exercise: Complete proof of theorom by induction on n
+	
+\end{theorem}
+
+\end{document}
