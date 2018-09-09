@@ -1,0 +1,311 @@
+\documentclass[11pt, notitlepage]{report}
+
+	\usepackage[margin=1in]{geometry}
+	\usepackage{amsmath,amsthm,amssymb,amsfonts}
+	\usepackage{enumitem}
+	\usepackage{booktabs,tabularx}
+
+	\newcommand{\N}{\mathbb{N}}
+	\newcommand{\Z}{\mathbb{Z}}
+	\newcommand{\R}{\mathbb{R}}
+	\newcommand{\A}{\alpha}
+	\newcommand{\ora}[1]{\overrightarrow{#1}}
+	\usepackage[parfill]{parskip}
+	\usepackage{mathtools}
+	\newenvironment{solution}{\paragraph{\small Solution:}}{\hfill}
+	\newenvironment{theorem}{\paragraph{Theorem:}}{\hfill}
+	\newenvironment{definition}{\paragraph{Definition:}}{\hfill}
+	\newenvironment{problem}[2][Problem]{\begin{trivlist}
+	\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+	
+	\usepackage{pgfplots}
+	\usetikzlibrary{arrows}
+	\usetikzlibrary{decorations.markings}
+	\usetikzlibrary{datavisualization}
+	\usetikzlibrary{datavisualization.formats.functions}
+	%\usepackage{pstricks-add}
+
+	\pgfplotsset{every axis/.append style={
+	                   axis x line=middle,    % put the x axis in the middle
+	                   axis y line=middle,    % put the y axis in the middle
+	                   axis line style={<->,color=gray}, % arrows on the axis
+	                   xlabel={$x$},          % default put x on x-axis
+	                   ylabel={$y$},          % default put y on y-axis
+	           }}
+	\pgfplotsset{compat=1.15}
+	
+	\newcommand{\pgraph}[4]{
+		\begin{center}
+		
+		\begin{tikzpicture}
+		\begin{axis}[
+		   trig format plots=rad,
+		   axis equal,
+		   grid=both
+		]
+		\addplot [domain=#3:#4, variable=\t, samples=50, black, decoration={
+		   markings,
+		   mark=between positions 0.2 and 1 step 4em with {\arrow [scale=1.5]{stealth}}
+		   }, postaction=decorate]
+		({#1}, {#2});
+		
+		\end{axis}
+		\end{tikzpicture}
+		
+		\end{center}
+	}
+
+
+   \newcommand{\cgraph}[3]{
+	   \begin{center}
+	
+	   \begin{tikzpicture}
+	   \begin{axis}[
+	       trig format plots=rad,
+	       axis equal,
+	       grid=both
+	   ]
+	   \addplot [domain=#2:#3, variable=\x, samples=50, black, decoration={
+	       markings,
+	       mark=between positions 0.2 and 1 step 4em with {\arrow [scale=1.5]{stealth}}
+	       }, postaction=decorate]
+	   {#1};
+	
+	   \end{axis}
+	   \end{tikzpicture}
+	
+	   \end{center}
+	}
+
+
+	
+	\makeatletter
+	\newcommand*{\toccontents}{\@starttoc{toc}}
+	\makeatother
+
+
+\begin{document}
+   \title{CS70: Homework 2}
+   \author{Abhijay Bhatnagar}
+   \maketitle
+   \toccontents
+
+
+
+\setcounter{secnumdepth}{0} %% no numbering
+\section{Sundry}
+
+I primarily worked alone, but I talked through some of my proofs and consulted a friend in the course to see if they agree'd with my logic. Received assistance from:
+
+ George Matheos: georgematheos@berkeley.edu(310) 435-1961.
+
+\section{Problem 1: Hit or Miss?}
+
+\begin{enumerate}[label=(\alph*)]
+	\item Proof is correct. However, I might be a little more explicit about how the inductive hypothesis helps me make the final $n^2+2n+1  \ge n+1$ claim.
+	\item Proof is correct.
+	\item There is an error in the inductive step. The claim that you can represent $n+1$ as $a+b$ where $0<a,b\leq$ is not valid for all nonnegative $n$. Consider the base $n=0$. It is impossible for two nonzero positive integers to sum to 1.
+\end{enumerate}
+
+\newpage
+\section{Problem 2: A Coin Game}
+
+Your "friend" Stanley Ford suggests you play the following game with him.  You each start with a single stack of $n$ coins.  On each of your turns, you select one of your stacks of coins (that has at least two coins) and split it into two stacks, each with at least one coin.  Your score for that turn is the product of the sizes of the two resulting stacks (for example, if you split a stack of 5 coins into a stack of 3 coins and a stack of 2 coins, your score would be $3 \cdot 2 = 6$).  You continue taking turns until all your stacks have only one coin in them.  Stan then plays the same game with his stack of $n$ coins, and whoever ends up with the largest total score over all their turns wins.
+
+Prove that no matter how you choose to split the stacks, your total score will always be $S_n=\frac{n(n - 1)}{2}$. (This means that you and Stan will end up with the same score no matter what happens, so the game is rather pointless.)
+
+\begin{proof}
+	We will proceed by Proof by Induction:
+	
+	\textbf{Base case}{\hskip \labelsep} 	Considering the base case of 1 coin, you can not split it, so the score always results in a score of 0. The formula holds for $n=1$: $S_1=\frac{2(2 - 1)}{2} = 0$.
+	
+	\textbf{Inductive Hypothesis}{\hskip \labelsep} Assume the claim holds true for all $1< k\leq n$, i.e. the final score is always $S_{k}=\frac{k(k - 1)}{2}$.
+	
+	\textbf{Inductive Step}{\hskip \labelsep} We prove the case for $n+1$. With $n+1$ original coins, we can split the stack into two smaller stacks of size $a$ and $b$, where $a+b=n+1$ and $1\leq a,b \leq n$, yielding a score for the step of $a \cdot b$ Using the strong inductive hypothesis, we know the total scores of piles $a, b$ will be $S_a, S_b$. This leaves the total score of $n+1$ to be the following:
+		\begin{align}
+			S_{n+1}&=a\cdot b + \frac{a(a - 1)}{2} + \frac{b(b - 1)}{2} \\
+				   &=\frac{2ab +a(a - 1)+ b(b - 1)}{2} \\
+				   &=\frac{a(a - 1 + )+ b(b - 1 +a)}{2} \\
+				   &=\frac{(a+b)(a + b - 1)}{2}
+		\end{align}
+		Substituting $a+b=n+1$, 
+		\[
+				S_{n+1}=\frac{(n + 1)(n)}{2}
+		\]
+		Which was the desired result. By the principle of mathematical induction, the claim holds.
+	\end{proof}
+
+
+\newpage
+\section{Problem 3: Grid Induction}
+
+There is a fairly obvious pattern that emerges when you consider that moving exactly one unit left or down per second from $i,j$ will always take $i+j$ seconds to terminate.
+\begin{proof}
+	Using a stronger hypothesis that he arrives at exactly $n=i+j$ seconds, we proceed by Proof by Induction on $n$:
+	
+	\textbf{Base case}{\hskip \labelsep} The base case of (0,0) is already at the origin, therefore it took exactly 0 seconds. The base case holds.
+	
+	\textbf{Inductive Hypothesis}{\hskip \labelsep} Assume that fo $n=k, k\in N$ Pacman takes exactly $k$ seconds to reach the origin.
+	
+	\textbf{Inductive Step}{\hskip \labelsep} For the case $n=k+1$ The Pacman will be at some $(i,j)$ such that $i+j=k+1$. After one second, Pacman will move to either $(i,j-1)$ or $(i-1,j)$. WLOG, we can proceed with $i$ as the decremented direction. From the inductive hypothesis, we know that for the position $(i-1,j)$ where $(i-1)+j=k$, Pacman will take exactly another $k$ seconds to return to origin. Therefore, for some $i+j=k+1$, Pacman will take a total of $k+1$ to return to the origin. The sum $i+j$ is finite, thus, by the principle of induction the original theorem holds.
+	
+\end{proof}
+
+\newpage
+\section{Problem 4: Stable Marriage}
+
+Consider a set of four men and four women with the following preferences:
+
+\begin{center}
+\begin{tabular}{|c|c||c|c|}\hline
+men&preferences&women & preferences \\
+\hline
+A& 1$>$2$>$3$>$4&1& D$>$A$>$B$>$C \\
+\hline
+B&1$>$3$>$2$>$4 &2& A$>$B$>$C$>$D  \\
+\hline
+C&1$>$3$>$2$>$4 &3& A$>$B$>$C$>$D  \\
+\hline
+D&3$>$1$>$2$>$4 &4& A$>$B$>$D$>$C  \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\begin{enumerate}[label=(\alph*)]
+	\item Day by day:
+	
+		\begin{center}
+		\begin{tabular}{ | c || c| c | } 
+		\hline
+		Days & Women & Proposals \\
+		\hline
+		1 &1  & \textbf{A}, B, C \\ 
+		  &2  & \\ 
+		  &3  & \textbf{D} \\ 
+		  &4  & \\ 
+		\hline
+		2 &1  & \textbf{A} \\ 
+		  &2  & \\ 
+		  &3  & D, \textbf{B}, C \\ 
+		  &4  & \\ 
+		\hline
+		3 &1  & A, \textbf{D} \\ 
+		  &2  & \textbf{C} \\ 
+		  &3  & \textbf{B} \\ 
+		  &4  & \\ 
+		\hline
+		4 &1  & \textbf{D}\\ 
+		  &2  & C, \textbf{A}\\ 
+		  &3  & \textbf{B}\\ 
+		  &4  & \\ 
+		\hline
+		5 &1  & \textbf{D}\\ 
+		  &2  & \textbf{A}\\ 
+		  &3  & \textbf{B}\\ 
+		  &4  & \textbf{C}\\ 
+		\hline
+		\end{tabular}
+		\end{center}
+		
+		Final pairings: \{1, D\}, \{2, A\}, \{3, B\}, \{4, C\}
+		\\
+	\item Suppose we relax the time constraints so each man can propose whenever he wants. Prove the algorithm's output doesn't change.
+		
+		\begin{proof} Proceed by contradiction. Suppose the algorithms output does change. Therefore,
+			there must exist some stable pair $(M*,W)$ that differs from the original stable pair $(M,W)$. In the new algorithm, there will be a first time at t=j a woman has rejected a man she previously accepted, i.e. W rejects M. This implies that at some time $t<j$, W has to have accepted some M*. However, we know from the original algorithm that M* will have proposed to some W* before W. However, in order for M* to later propose to W, that must imply W* rejected M*, which would imply that $t=j$ is not the first a woman made a new decision. This is a contradiction.
+
+		\end{proof}
+
+\end{enumerate}
+
+\newpage
+\section{Problem 5: Optimal Partners}
+
+In the notes, we proved that the Stable Marriage Algorithm always outputs the male-optimal pairing.  However, we never explicitly showed why it is guaranteed that putting every man with his best choice results in a pairing at all.  Prove by contradiction that no two men can have the same optimal partner.  (Note: your proof should not rely on the fact that the Stable Marriage Algorithm outputs the male-optimal pairing.)
+
+\begin{proof}We will proceed by contradiction.
+	Suppose there are two men, $M, M*$ with the same optimal woman $W$. By definition, this means that both $(M, W)$ and $(M*,W)$ are stable pairings, which implies that there must exist at least two solutions sets $S_1, S_2$ for each case.
+	
+	Case 1: $S_1$ must contain two pairings $(M, W)$ and $( M*,W' )$. Since we know $W$ is $M*$'s optimal woman, $M*$ must have proposed to $W$ before $W'$ and received a rejection. This implies that $W$ prefers $M$ over $M*$. 
+	
+	Case 2: $S_2$ must contain two pairings $(M*, W)$ and $( M, W' )$. Since we know $W$ is $M$'s optimal woman, $M$ must have proposed to $W$ before $W'$ and received a rejection. This implies that $W$ prefers $M*$ over $M$.  
+	
+	The woman $W$ cannot simultaneously prefer $M*$ over $M$ and $M$ over $M*$, therefore there is a contradiction.
+
+\end{proof}
+
+\newpage
+\section{Problem 6: Examples or It's Impossible}
+Determine if each of the situations below is possible with the traditional propose-and-reject algorithm.
+If so, give an example with at least $3$ men and $3$ women. Otherwise, give a brief proof as to why it's impossible.
+
+\begin{enumerate}[label=(\alph*)]
+	\item Every man gets his first choice. Example: \hfill
+	
+	\begin{center}
+	\begin{tabular}{|c|c||c|c|}\hline
+	men&preferences&women & preferences \\
+	\hline
+	A&1$>$2$>$3		&1& A$>$B$>$C \\
+	\hline
+	B&2$>$3$>$1     &2& B$>$C$>$A  \\
+	\hline
+	C&3$>$1$>$2     &3& C$>$A$>$B  \\
+	\hline
+	\end{tabular}
+	\end{center}
+	
+	Day 1, each man proposes to his ideal partner, and they all accept.
+    
+    \item Every woman gets her first choice, even though her first choice does not prefer her the most. Example:
+	\begin{center}
+	\begin{tabular}{|c|c||c|c|}\hline
+	men&preferences&women & preferences \\
+	\hline
+	A&3$>$1$>$2		&1& A$>$B$>$C \\
+	\hline
+	B&1$>$2$>$3     &2& B$>$C$>$A  \\
+	\hline
+	C&1$>$3$>$2     &3& C$>$A$>$B  \\
+	\hline
+	\end{tabular}
+	\end{center}
+	
+    \item Every woman gets her last choice. Example: \hfill
+	
+	\begin{center}
+	\begin{tabular}{|c|c||c|c|}\hline
+	men&preferences&women & preferences \\
+	\hline
+	A&1$>$2$>$3		&1& C$>$B$>$A \\
+	\hline
+	B&2$>$3$>$1     &2& A$>$C$>$B  \\
+	\hline
+	C&3$>$1$>$2     &3& B$>$A$>$C  \\
+	\hline
+	\end{tabular}
+	\end{center}
+    \item Every man gets his last choice. Impossible.
+    \begin{proof}
+    	We proceed by contradiction. Suppose every man gets his last choice woman, this implies that the solution set has pairings $(M_1,W_1),...,(M_n,W_n)$. Since this is the last choice woman, there exists an $(M_k,W_k)$ for which $(M_1,W_k)$ and $(M_k,W_1)$ are both stable pairs, both of which are more male optimal. The Stable Marriage algorithm is a male optimal algorithm, therefore the solution set that contains $(M_1,W_k)$ and $(M_k,W_1)$ would be created before the $(M_1,W_1)$ and $(M_k,W_k)$, which creates a contradiction.
+    \end{proof}
+    \item A man who is second on every woman's list gets his last choice.  Example: \hfill
+	
+	\begin{center}
+	\begin{tabular}{|c|c||c|c|}\hline
+	men&preferences&women & preferences \\
+	\hline
+	A&1$>$2$>$3		&1& A$>$B$>$C \\
+	\hline
+	B&1$>$2$>$3     &2& C$>$B$>$A  \\
+	\hline
+	C&1$>$2$>$3     &3& C$>$B$>$A  \\
+	\hline
+	\end{tabular}
+	\end{center}
+
+
+
+
+\end{document}
