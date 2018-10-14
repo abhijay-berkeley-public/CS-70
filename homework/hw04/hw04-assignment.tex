@@ -1,0 +1,107 @@
+\Question {Modular Arithmetic Solutions}
+
+Find all solutions (modulo the corresponding modulus) to the following equations.  Prove that there are no other solutions (in a modular setting) to each equation.
+
+\begin{Parts} 
+\Part $2x \equiv 5 \pmod{15}$
+
+\Part $2x \equiv 5 \pmod{16}$
+
+\Part $5x \equiv 10 \pmod{25}$
+
+\end{Parts}
+
+
+\Question{Euclid's Algorithm}
+
+\begin{Parts}
+    \Part Use Euclid's algorithm from lecture to compute the greatest common divisor of 527 and 323. List the values of $x$ and $y$ of all recursive calls.
+
+    \Part Use extended Euclid's algorithm from lecture to compute the multiplicative inverse of 5 mod 27. List the values of $x$ and $y$ and the returned values of all recursive calls.
+
+    \Part Find $x \pmod{27}$ if $5x + 2 6 \equiv 3 \pmod{27}$. You can use the result computed in (b).
+
+    \Part Assume $a$, $b$, and $c$ are integers and $c>0$. Prove or disprove: If $a$ has no multiplicative inverse mod $c$, then $ax \equiv b \pmod{c}$ has no solution.
+
+\end{Parts}
+
+
+\Question{Modular Exponentiation}
+
+Compute the following:
+
+\begin{Parts}
+
+\Part $13^{2018} \pmod {12}$
+\nosolspace{1.5cm}
+
+\Part $8^{11111} \pmod 9$
+\nosolspace{1.5cm}
+
+\Part $7^{256} \pmod {11}$
+\nosolspace{1.5cm}
+
+\Part $3^{160} \pmod {23}$
+\nosolspace{1.5cm}
+
+\end{Parts}
+
+\Question{Euler's Totient Function}
+
+  Euler's totient function is defined as follows:
+  $$\phi(n) = | \{i: 1 \leq i \leq n, \texttt{gcd}(n,i) = 1\} |$$
+  In other words, $\phi(n)$ is the total number of positive integers less than or equal to $n$ which are relatively prime to it.
+  Here is a property of Euler's totient function that you can use without proof:
+
+  For $m,n$ such that \texttt{gcd}($m,n$) = 1, $\phi(mn) = \phi(m) \cdot \phi(n)$.
+
+  \begin{Parts}
+  \Part
+    Let $p$ be a prime number.
+    What is $\phi(p)$?
+
+    \Part
+    Let $p$ be a prime number and $k$ be some positive integer.
+    What is $\phi(p^k)$?
+
+
+    \Part
+    Let $p$ be a prime number and $a$ be a positive integer smaller than $p$.
+    What is $a^{\phi(p)} \pmod{p}$?\\\emph{(Hint: use Fermat's Little Theorem.)}
+
+    \Part
+    Let $b$ be a positive integer whose prime factors are $p_1,p_2,\hdots, p_k$.
+    We can write $b = p_1^{\alpha_1}\cdot p_2^{\alpha_2} \hdots p_k^{\alpha_k}$.
+
+    Show that for any $a$ relatively prime to $b$, the following holds:
+    $$\forall i \in \{1,2,\hdots,k\}, \hspace{0.2cm} a^{\phi(b)} \equiv 1 \pmod{p_i}$$
+
+  \end{Parts}
+
+
+\Question{FLT Converse}
+
+Recall that the FLT states that, given a prime $n$, $a^{n-1} \equiv 1 \pmod{n}$ \textit{for all $1 \leq a \leq n-1$}. Note that it says nothing about when $n$ is composite.
+
+Can the FLT condition ($a^{n-1} \equiv 1 \mod n$) hold for some or even all $a$ if $n$ is composite? This problem will investigate both possibilities. 
+It turns out that unlike in the prime case, we need to restrict ourselves to looking at $a$ that are relatively prime to $n$. (Note that if $n$ is prime, then every $a<n$ is relatively prime to $n$). Because of this restriction, let's define $$S(n) =  \{i: 1 \leq i \leq n, \texttt{gcd}(n,i) = 1\},$$ so $\mid S \mid$ is the total number of possible choices for $a$.
+\begin{Parts}
+\Part Prove that for every $a$ and $n$ that are not relatively prime, FLT condition fails. In other words, for every $a$ and $n$ such that $\texttt{gcd}(n,a) \neq 1$, we have $a^{n-1} \not\equiv 1 \pmod{n}$.
+
+    \Part Prove that the FLT condition fails for most choices of $a$ and $n$. More precisely, show that if we can find a single $a \in S(n)$ such that $a^{n-1} \not \equiv 1 \pmod{n}$, we can find at least $|S(n)|/2$ such $a$. (Hint: You're almost there if you can show that the set of numbers that fail the FLT condition is at least as large as the set of numbers that pass it. A clever bijection may be useful to compare set sizes.)
+
+\end{Parts}
+The above tells us that if a composite number fails the FLT condition for even one number relatively prime to it, then it fails the condition for most numbers relatively prime to it. However, it doesn't rule out the possibility that some composite number $n$ satisifes the FLT condition entirely: \emph{for all} $a$ relatively prime to $n$, $a^{n-1}\equiv 1 \mod n$. It turns out such numbers do exist, but they were found through trial-and-error! We will prove one of the conditions on $n$ that make it easy to verify the existence of these numbers.
+\begin{ResumeParts}
+    \Part First, show that if $a \equiv b \mod m_1$ and $a \equiv b \mod m_2$, with $\gcd(m_1, m_2)=1$, then $a \equiv b \pmod{m_1 m_2}$.
+    
+    \Part Let $n = p_1 p_2 \cdots p_k$ where $p_i$ are distinct primes and $p_i - 1 \mid n - 1$ for all $i$. Show that $a^{n-1} \equiv 1 \pmod{n}$ for all $a \in S(n)$ %relatively prime to $n$.
+    
+        % \item Now we will show the converse; if a composite number $n$ satisfies the FLT condition, it must be the product of primes $p_i$ where $p_i \mid n-1$
+    % \begin{enumerate}
+    %     \item First, show that for every prime $p$, you can find a number $a$ such that $a^{p-1} = 1 \mod p$ \emph{and} $a^k \neq 1 \mod p$ for all $1 \leq k < p-1$. We call $p-1$ the \textit{order} of $a \mod p$
+
+    \Part Verify that for all $a$ coprime with 561, $a^{560} \equiv 1 \pmod{561}$.
+\end{ResumeParts}
+
+

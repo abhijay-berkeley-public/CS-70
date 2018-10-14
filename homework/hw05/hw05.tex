@@ -1,0 +1,224 @@
+\documentclass[11pt, notitlepage]{report}
+
+	\usepackage[margin=1in]{geometry}
+	\usepackage{amsmath,amsthm,amssymb,amsfonts}
+	\usepackage{enumitem}
+	\usepackage{systeme}
+
+	\newcommand{\N}{\mathbb{N}}
+	\newcommand{\Z}{\mathbb{Z}}
+	\newcommand{\R}{\mathbb{R}}
+	\newcommand{\A}{\alpha}
+	\newcommand{\ora}[1]{\overrightarrow{#1}}
+	\newcommand{\Question}[1]{\newpage\section{#1}}
+	\usepackage[parfill]{parskip}
+	\usepackage{mathtools}
+	\newenvironment{solution}{\paragraph{Solution:}}{\hfill}
+	\newenvironment{theorem}{\paragraph{Theorem:}}{\hfill}
+	\newenvironment{subtheorem}[1]{\paragraph{\small Subtheorem #1:}}{\hfill}
+	\newenvironment{definition}{\paragraph{Definition:}}{\hfill}
+	\newenvironment{problem}[2][Problem]{\begin{trivlist}
+	\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+	
+	\usepackage{pgfplots}
+	\usetikzlibrary{arrows}
+	\usetikzlibrary{decorations.markings}
+	\usetikzlibrary{datavisualization}
+	\usetikzlibrary{datavisualization.formats.functions}
+	%\usepackage{pstricks-add}
+
+	\pgfplotsset{every axis/.append style={
+	                   axis x line=middle,    % put the x axis in the middle
+	                   axis y line=middle,    % put the y axis in the middle
+	                   axis line style={<->,color=gray}, % arrows on the axis
+	                   xlabel={$x$},          % default put x on x-axis
+	                   ylabel={$y$},          % default put y on y-axis
+	           }}
+	\pgfplotsset{compat=1.15}
+	
+	\newcommand{\pgraph}[4]{
+		\begin{center}
+		
+		\begin{tikzpicture}
+		\begin{axis}[
+		   trig format plots=rad,
+		   axis equal,
+		   grid=both
+		]
+		\addplot [domain=#3:#4, variable=\t, samples=50, black, decoration={
+		   markings,
+		   mark=between positions 0.2 and 1 step 4em with {\arrow [scale=1.5]{stealth}}
+		   }, postaction=decorate]
+		({#1}, {#2});
+		
+		\end{axis}
+		\end{tikzpicture}
+		
+		\end{center}
+	}
+
+
+   \newcommand{\cgraph}[3]{
+	   \begin{center}
+	
+	   \begin{tikzpicture}
+	   \begin{axis}[
+	       trig format plots=rad,
+	       axis equal,
+	       grid=both
+	   ]
+	   \addplot [domain=#2:#3, variable=\x, samples=50, black, decoration={
+	       markings,
+	       mark=between positions 0.2 and 1 step 4em with {\arrow [scale=1.5]{stealth}}
+	       }, postaction=decorate]
+	   {#1};
+	
+	   \end{axis}
+	   \end{tikzpicture}
+	
+	   \end{center}
+	}
+
+
+	
+	\makeatletter
+	\newcommand*{\toccontents}{\@starttoc{toc}}
+	\makeatother
+
+
+\begin{document}
+   \title{CS70: Homework \#5}
+   \author{Abhijay Bhatnagar}
+   \maketitle
+   \toccontents
+
+
+
+\setcounter{secnumdepth}{0} %% no numbering
+
+\Question{Problem 1: Quick Computes}
+Simplify each expression using Fermat's Little Theorem. 
+\begin{enumerate}[label=(\alph*)]
+  \item $3^{33} \pmod{11}$
+	\begin{solution} $5\pmod{11}$.
+	\begin{align*}
+		3^{33} \pmod{11}&\equiv (3^3)^{11} \pmod{11} \\
+		&\equiv 27^{11} \pmod{11} \\
+		&\equiv 27\pmod{11} \\
+		&\equiv 5\pmod{11}
+	\end{align*}
+	\end{solution}
+  \item $10001^{10001} \pmod{17}$
+	\begin{solution} 5 (mod 17).
+	\begin{align*}
+		10001^{10001} \pmod{17} &\equiv 10001^{10000 + 1} \pmod{17} \\
+		&\equiv (10001^{625^{17-1}})\cdot 10001 \pmod{17} \\
+		&\equiv (1)\cdot 10001 \pmod{17} \\
+		&\equiv 5 \pmod{17} 
+	\end{align*}
+		
+	\end{solution}
+  \item $10^{10} + 20^{20} + 30^{30} + 40^{40} \pmod{7}$
+  \begin{solution}1 (mod 7).
+  	\begin{align*}
+  		10^{10} + 20^{20} + 30^{30} + 40^{40} \pmod{7} &\equiv 3^{10} + 6^{20} + 2^{30} + 5^{40} \pmod{7} \\
+  		&\equiv 3^{4} + 6^{2} + 2^{0} + 5^{4} \pmod{7} \\
+  		&\equiv 9^2 + 36 + 1 + 25^{2} \pmod{7} \\
+  		&\equiv 4 + 1 + 1 + 4^{2} \pmod{7} \\
+  		&\equiv 22 \pmod{7} \\
+  		&\equiv 1 \pmod{7} \\
+  	\end{align*}
+  \end{solution}
+\end{enumerate}
+
+\Question{Problem 2: RSA Practice}
+
+Bob would like to receive encrypted messages from Alice via RSA.
+\begin{enumerate}[label=(\alph*)]
+    \item Bob chooses $p = 7$ and $q = 11$. His public key is $(N,e)$.
+    What is $N$?
+	\begin{solution}
+		N=77
+	\end{solution}
+    \item What number is $e$ relatively prime to?
+	\begin{solution}
+		$e$ is relatively prime to (7-1)(11-1)= 60.
+	\end{solution}
+    \item $e$ need not be prime itself, but what is the smallest prime number $e$ can be? Use this value for $e$ in all subsequent computations.
+	\begin{solution}
+		Smallest value for $e=7.$
+	\end{solution}
+    \item What is $\gcd(e,(p-1)(q-1))$?
+	\begin{solution}
+		$\gcd(e,(p-1)(q-1))=1$
+	\end{solution}
+    \item What is the decryption exponent $d$? 
+    \begin{solution} 
+    \begin{align*}
+			d&=e^{-1} \pmod{60}\\
+			&=7^{-1} \pmod{60}\\
+			&=-17 \pmod{60}\\
+			&=43 \pmod{60}\\
+		\end{align*}
+	\end{solution}
+    \item Now imagine that Alice wants to send Bob the message $30$. She applies her encryption function $E$ to $30$. What is her encrypted message?
+	\begin{solution}
+		$E(30)=30^{7}\pmod{77}=2\pmod{77}$ (Using extended Euclid's.)
+	\end{solution}
+    \item Bob receives the encrypted message, and applies his decryption function $D$ to it.
+    What is $D$ applied to the received message?
+    \begin{solution}
+    	$D(2)=2^{43}\pmod{77}=30\pmod{77}$
+    \end{solution}
+
+\end{enumerate}
+
+
+\Question{Problem 3: Squared RSA}
+
+\begin{enumerate}[label=(\alph*)]
+  \item Prove the identity $a^{p(p - 1)} \equiv 1 \pmod{p^2}$, where $a$ is coprime to $p$, and $p$ is prime. (Hint: Try to mimic the proof of Fermat's Little Theorem from the notes.)
+	\begin{solution}
+		We have to show $(\forall p\in \text{primes},\forall a : gcd(p,a)=1)(a^{p(p - 1)} \equiv 1 \pmod{p^2})$.
+		\begin{proof}
+			Let $S$ denote the set of nonzero integers which have an inverse mod $p^2$, i.e. \[S=\{1,2,...,p^2-1\} / \{p, 2p , ...,(p-1)p\} \] Note: S will have exactly $(p^2-1) - (p-1) = p^2-p$ terms. Now, consider the sequence \[S'= a^p,2a^p,...,(p^2-1)a^p \pmod{p^2}\]. Since $a$ and $p$ are coprime, we know that $a^p$ and $p^2$ must also be coprime (because greatest common prime factor of $a$ and $p$ is 1, and that doesn't change in $a^p$ and $p^2$, and all other factors have unique prime factorization). However, each term with a coefficient that is a scalar multiple of $p$ is not coprime, so let us redefine $S'$ to exclude those elements. \[S'= \{a^p,2a^p,...,(p^2-1)a^p\}/\{pa^p,2pa^p,...,(p-1)a^p\} \pmod{p^2}\]
+			
+			From here, we know that every element in $S'$ must be distinct. None of them are zero, and there are exactly $(p^2-1) - (p-1) = p^2-p$ terms $\implies S$ and $S'$ contain the same elements mod $p^2$.
+			
+			Now if both sets contain the same elements mod $p^2$, then the products must also be equivalent mod $p^2$.
+			
+			\[\implies a^{(p^2-p)} \times \prod_{n\in S}{n} \equiv \prod_{n\in S}{n} \pmod{p^2} \]
+			Since each $n\in S$ is coprime to $p^2$, it must have an inverse mod $p^2$. Let us call this inverse $S^{-1}$. We can multiply both sides by $S^{-1}$ to remove the product term.
+			\[\implies a^{(p^2-p)} \times \prod_{n\in S}{n} \times S^{-1} \equiv \prod_{n\in S}{n} \times S^{-1} \pmod{p^2} \]
+			\[\implies a^{p(p-1)} \equiv 1 \pmod{p^2} \]
+
+		\end{proof}
+	\end{solution}
+	  \newpage
+
+  \item Now consider the RSA scheme: the public key is $(N = p^2 q^2, e)$ for primes $p$ and $q$, with $e$ relatively prime to $p(p-1)q(q-1)$. The private key is $d = e^{-1} \pmod{p(p-1)q(q-1)}$.
+  Prove that the scheme is correct for $x$ relatively prime to both $p$ and $q$, i.e.\ $x^{ed} \equiv x \pmod{N}$.
+ 
+  \begin{solution}
+  	To prove the statement, we have to prove: \begin{equation}\forall x\text{ relatively prime to $p$ and $q$}, (x^e)^d=x\pmod{N}\end{equation}
+  \begin{proof}
+  	Consider the exponent, $ed$. By the definition of $d$, we know that $ed= 1 \pmod{p(p-1)q(q-1)}$; hence we can write $ed= 1 + kp(p-1)q(q-1)$, therefore:
+  	\begin{equation}x^{ed}-x=x^{1 + kp(p-1)q(q-1)}-x=x(x^{kp(p-1)q(q-1)}-1)\end{equation}
+  	From (1), we want to show that this last expression is 0 mod N. We claim this is so because $x(x^{kp(p-1)q(q-1)}-1)$ is divisible by $p^2$. To show this, let us consider 2 cases:
+  	\begin{enumerate}[label=\arabic*.)]
+  	\item $x$ is not a multiple of $p^2$. In this case, since $x\not=0\pmod{p^2}$, we can use our results from (a) to deduce that $x^{kp(p-1)q(q-1)}-1=0 \pmod{p^2}$, as desired.
+  	\item $x$ is a multiple of $p^2$. In this case, since $x\not=0\pmod{p^2}$ is a multiple of x, it is trivially divisible by $p^2$.
+  	\end{enumerate}
+  	By a symmetrical argument, the expression is also divisible by $q^2$, therefore it is divisible by both $p^2$ and $q^2$, and must also be divisible by their products, $p^2q^2=N$. This implies the final expression in (2) $=0\pmod{N}$, which was the necessary condition for our proof.
+  \end{proof}
+  \end{solution}
+  
+  \item Prove that this scheme is at least as hard to break as normal RSA; that is, prove that if this scheme can be broken, normal RSA can be as well. We consider RSA to be broken if knowing $pq$ allows you to deduce $(p - 1)(q - 1)$. We consider squared RSA to be broken if knowing $p^2q^2$ allows you to deduce $p(p - 1)q(q - 1)$.
+ \begin{solution}
+  	The difficult of breaking RSA comes down to difficult of factoring, which is generally accepted to be \textit{hard}. The difficult of breaking squared RSA is a question of figuring out the nontrivial factors of $N=p^2q^2$, which are \{$p,p,q,q$\} (and combinations of those), which are also the prime factors of the normal RSA $N$. If we are able to find out the factors of squared RSA, it means we have deduced we have also found the factors of the normal RSA. Additionally, it means we've found $p(p - 1)q(q - 1)$. From there, we can easily (read: low complexity) divide by the $\sqrt{p^2q^2}=pq$ to get $(p - 1)(q - 1)$, which is solution to cracking the conventional RSA. 
+  \end{solution}
+\end{enumerate}
+
+\end{document}
+
+
