@@ -1,0 +1,13 @@
+This is TeX, Version 3.14159265 (TeX Live 2018) (preloaded format=tex 2018.4.16)  16 NOV 2018 16:29
+**hw12.tex
+(./hw12.tex
+! Undefined control sequence.
+l.1 \documentclass
+                  [11pt, notitlepage]{article}
+? 
+! Emergency stop.
+l.1 \documentclass
+                  [11pt, notitlepage]{article}
+End of file on the terminal!
+
+No pages of output.

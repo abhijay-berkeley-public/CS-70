@@ -1,0 +1,250 @@
+\documentclass[11pt, notitlepage]{article}
+
+	\usepackage[margin=1in]{geometry}
+	\usepackage{amsmath,amsthm,amssymb,amsfonts}
+	\usepackage{enumitem}
+	\usepackage{systeme}
+
+	\newcommand{\N}{\mathbb{N}}
+	\newcommand{\Z}{\mathbb{Z}}
+	\newcommand{\R}{\mathbb{R}}
+	\newcommand{\E}{\mathbb{E}}
+	\newcommand{\mP}{\mathbb{P}}
+	\newcommand{\A}{\alpha}
+	\newcommand{\var}{\text{var}}
+	\newcommand{\cov}{\text{cov}}
+	\newcommand{\ora}[1]{\overrightarrow{#1}}
+	\newcommand{\Question}[1]{\newpage\section{#1}}
+	\newcommand*{\Perm}[2]{{}^{#1}\!P_{#2}}%
+	\newcommand*{\Comb}[2]{{}^{#1}C_{#2}}%
+	\usepackage[parfill]{parskip}
+	\usepackage{mathtools}
+	\newenvironment{solution}{\paragraph{Solution:}}{\hfill \vspace{10mm}}
+	\newenvironment{theorem}{\paragraph{Theorem:}}{\hfill}
+	\newenvironment{subtheorem}[1]{\paragraph{\small Subtheorem #1:}}{\hfill}
+	\newenvironment{definition}{\paragraph{Definition:}}{\hfill}
+	\newenvironment{problem}[2][Problem]{\begin{trivlist}
+	\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+	
+	\usepackage{pgfplots}
+	\usetikzlibrary{arrows}
+	\usetikzlibrary{decorations.markings}
+	\usetikzlibrary{datavisualization}
+	\usetikzlibrary{datavisualization.formats.functions}
+	%\usepackage{pstricks-add}
+	\setlength\parindent{24pt}
+	\makeatletter
+	\newcommand*{\toccontents}{\@starttoc{toc}}
+	\makeatother
+
+
+\begin{document}
+   \title{CS 70: Homework \#10}
+   \author{Abhijay Bhatnagar}
+   \maketitle
+   \toccontents
+
+\Question{Family Planning}
+
+Mr. and Mrs. Brown decide to continue having children until they either have their first girl or until
+they have three children. Assume that each child is equally likely to be a boy or a girl, independent of
+all other children, and that there are no multiple births. Let $G$ denote the numbers of girls that the Browns have. Let $C$ be the total number of children they have.
+
+\begin{enumerate}[label=\alph*.)]
+
+\item Determine the sample space, along with the probability of each sample point.
+	\begin{solution}
+	\begin{tabular}{|c||c|} 
+	\hline
+	$\omega$ & $Pr[\omega]$  \\
+	\hline
+	\hline
+	G & (1/2) \\
+	 \hline
+	BG & (1/4) \\
+	\hline
+	BBG & (1/8) \\
+	\hline
+	BBB & (1/8) \\
+	\hline
+	\end{tabular}
+
+	\end{solution}
+\item Compute the joint distribution of $G$ and $C$. Fill in the table below.
+\begin{solution}
+	
+\scalebox{1.2}{
+\begin{tabular}{|c||c|c|c|}
+	\hline
+	 & $C = 1$ & $C = 2$ & $C = 3$ \\
+	\hline
+	\hline
+	$G = 0$ & 0 & 0 & 1/4 \\
+	 \hline
+	$G = 1$ & 1/4 & 1/4 & 1/4 \\
+	\hline
+	\end{tabular}}
+
+\end{solution}
+
+\item Use the joint distribution to compute the marginal distributions of $G$ and $C$ and confirm that the values are as you'd expect. Fill in the tables below.
+\begin{solution}
+	
+\scalebox{1.2}{
+\begin{tabular}{|c||c|} 
+	\hline
+	$\Pr(G = 0)$ & 1/4 \\
+	\hline
+	$\Pr(G = 1)$ & 3/4 \\
+	\hline
+\end{tabular}}
+
+\scalebox{1.2}{
+
+\begin{tabular}{|c|c|c|} 
+	\hline
+	$\Pr(C = 1)$ & $\Pr(C = 2)$ & $\Pr(C = 3)$ \\
+	\hline
+	\hline
+	1/4 & 1/4 & 1/2 \\
+	\hline
+	\end{tabular}}
+	
+These values match the sample space, therefore they are as expected.
+\end{solution}
+\item Are $G$ and $C$ independent?
+\begin{solution}
+	No.
+\end{solution}
+\item What is the expected number of girls the Browns will have? What is the expected number of children that the Browns will have?
+	\begin{solution}
+	$\E[G]=3/4, \E[C]=9/4$
+	\end{solution}
+
+\end{enumerate}
+
+
+\Question{Will I Get My Package?}
+
+A delivery guy in some company is out delivering $n$ packages to $n$ customers, where $n \in \N$, $n > 1$.
+Not only does he hand a random package to each customer, he opens the package before delivering it with probability $1/2$.
+Let $X$ be the number of customers who receive their own packages unopened. 
+
+\begin{enumerate}[label=\alph*.)]
+
+\item Compute the expectation $\E(X)$.
+	\begin{solution} Let $I_i$ be the indicator variable that person $i$ has received their unopened package.
+	
+	$\E[X]=\sum\E[X_i]=n\mP[I_i=1]=n\times {\frac{1}{2}\times\frac{1}{n}}=1/2$
+	\end{solution}
+
+\item Compute the variance $\var(X)$.
+	\begin{solution}\
+	
+	$\begin{aligned}\E[X^2]&=\sum_{i=1}^{n}{\E[I_i^2]}+2\sum_{i<j}{\E[I_iI_j]} \\
+	&=n\mP[I_i=1]+2\sum{\frac{1}{4}\times\frac{1}{n(n-1)}}\\
+	&=1/2+2\times \binom{n}{2}\times {\frac{1}{4}\times\frac{1}{n(n-1)}}\\
+	&=1/2+1/4\\
+	&=3/4\\
+	\end{aligned}$
+	
+	$\var(X)=\E[X^2]-\E[X]^2=3/4-(1/2)^2=1/2$
+	\end{solution}
+
+\end{enumerate}
+
+
+
+\Question{Double-Check Your Intuition Again}
+
+
+\begin{enumerate}[label=\alph*.)]
+	\item You roll a fair six-sided die and record the result $X$. You roll the die again and record the result $Y$. 
+	
+	\begin{enumerate}[label=(\roman*)]
+		\item What is $\cov (X+Y, X-Y)$? 
+		\begin{solution}\
+		
+		$\begin{aligned}
+			\cov (X+Y, X-Y)&=\E[(X+Y)(X-Y)]-\E[X+Y]\E[X-Y]\\
+			&= \E[X^2-Y^2]-(\E[X]+\E[Y])(\E[X]-\E[Y]) \\
+			&= \E[X^2]-E[Y^2]-\E[X]^2+\E[Y]^2 \\
+			&= \E[X^2]-\E[X]^2-(E[Y^2]-\E[Y]^2) \\
+			&= (\E[X^2]-\E[X]^2)-(E[Y^2]-\E[Y]^2) \\
+			&= \cov (X,X)-\cov (Y, Y) \\
+			&= \var(X)-\var(Y) \\
+			&= 35/12-35/12 \\
+			&= 0 \\
+		\end{aligned}$			
+%			Starting from the simple expected values:
+%			
+%			$\E[X+Y]= \E[X]+\E[Y]=7/2+7/2=7$ \\
+%			$\E[X-Y]= \E[X]-\E[Y]=7/2-7/2=0$ \\
+%
+%		Now for the more complicated expected value, \\
+%		$\E[(X+Y)(X-Y)]= \E[X^2-Y^2]=\E[X^2]-\E[Y^2]=0$
+%		
+%		Which implies $\cov (X+Y, X-Y)=0-7\times 0=0$
+		\end{solution}
+		\item Prove that $X+Y$ and $X-Y$ are not independent.
+		\begin{solution}
+		Let X be a coin flip where a landing heads is worth 1, and let Y = 2X. X+Y=3X, X-Y=-X.
+		
+		In order for X+Y and X-Y to be independent, $\E[(X+Y)(X-Y)]=\E[X+Y]\E[X-Y]$.
+		
+		$\E[X+Y]=\E[X] + \E[Y] = \E[X]+\E[2X]=1.5$ \\
+		$\E[X-Y]=\E[X] - \E[Y] = \E[X]-\E[2X]=-0.5$ \\
+		$\E[X+Y]\E[X-Y]= 1.5\times -0.5= -0.75$ \\
+
+		$\begin{aligned} \E[(X+Y)(X-Y)]&=\E[X^2+Y^2]\\
+		&=\E[X^2] - \E[Y^2] \\
+		&= \E[X^2]-\E[4X^2] \\
+		&=0.5-(4\times 0.5) \\
+		&=-1.5 \not = -0.75 \not = \E[X+Y]\E[X-Y] \end{aligned}$
+		
+		Therefore, the two are not independent.
+		\end{solution}
+
+	\end{enumerate}
+	
+	\newpage
+	
+	For each of the problems below, if you think the answer is "yes" then provide a proof. If you think the answer is "no", then provide a counterexample.
+	
+	\item If $X$ is a random variable and $\var (X) = 0$, then must $X$ be a constant?
+		\begin{solution} Yes. $\var (X) = 0=\E[(X-\mu)^2]=\sum_{a\in \mathbb{A}}a\mP[(X-u)^2=a]$, which is a sum of absolute distances from the expected value of X. Absolute differences are always positive, the sum of differences from X to E[X] = 0, which implies X is always = E[X], therefore X is constant.
+			\end{solution}
+
+	\item If $X$ is a random variable and $c$ is a constant, then is $\var (cX) = c \var (X)$?
+		\begin{solution} No. Let X be a simple dice roll, and $c=12$.
+		
+		$c\var(X)=c \times \frac{35}{12}=35$.
+		
+		$\var(cX)=\E[(cX)^2]-\E[cX]^2=c^2\E[X^2]-c\E[X]^2=c^2\times\frac{91}{6}+c\times \frac{49}{4}=2331$.
+		
+		 The two are not equal.
+		\end{solution}
+
+	\item If $A$ and $B$ are random variables with nonzero standard deviations and $\text{Corr} (A, B) = 0$, then are $A$ and $B$ independent?
+		\begin{solution} No. Look at part (a)ii as an example. $\var(X)=\var(Y)=35/12\implies$ both standard deviations are nonzero, and correlation = 0.
+			\end{solution}
+
+	\item If $X$ and $Y$ are not necessarily independent random variables, but $\text{Corr} (X, Y) = 0$, and $X$ and $Y$ have nonzero standard deviations, then is $\var (X+Y) = \var(X) + \var(Y)$?
+		\begin{solution}
+		Yes. $\var(X+Y)=\var(X)+\var(Y)+2\cov(X,Y)$. The correlation = 0 (with nonzero standard deviations) implies the covariance = 0, which implies the original statement is true.
+		\end{solution}
+
+	\item If $X$ and $Y$ are random variables then is $\E(\max (X, Y) \min (X, Y)) = \E(X Y)$?
+		\begin{solution} Yes.
+		
+		\end{solution}
+
+	\item If $X$ and $Y$ are independent random variables with nonzero standard deviations, then is $$\text{Corr} (\max (X, Y), \min (X, Y)) = \text{Corr} (X, Y) ?$$
+		\begin{solution} 
+		Yes
+			\end{solution}
+\end{enumerate}
+
+\end{document}
+
+

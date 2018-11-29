@@ -1,0 +1,252 @@
+\documentclass[11pt, notitlepage]{article}
+
+	\usepackage[margin=1in]{geometry}
+	\usepackage{amsmath,amsthm,amssymb,amsfonts}
+	\usepackage{enumitem}
+	\usepackage{systeme}
+
+	\newcommand{\N}{\mathbb{N}}
+	\newcommand{\Z}{\mathbb{Z}}
+	\newcommand{\R}{\mathbb{R}}
+	\newcommand{\E}{\mathbb{E}}
+	\newcommand{\mP}{\mathbb{P}}
+	\newcommand{\A}{\alpha}
+	\newcommand{\ora}[1]{\overrightarrow{#1}}
+	\newcommand{\Question}[1]{\newpage\section{#1}}
+	\newcommand*{\Perm}[2]{{}^{#1}\!P_{#2}}%
+	\newcommand*{\Comb}[2]{{}^{#1}C_{#2}}%
+	\usepackage[parfill]{parskip}
+	\usepackage{mathtools}
+	\newenvironment{solution}{\paragraph{Solution:}}{\hfill \vspace{10mm}}
+	\newenvironment{theorem}{\paragraph{Theorem:}}{\hfill}
+	\newenvironment{subtheorem}[1]{\paragraph{\small Subtheorem #1:}}{\hfill}
+	\newenvironment{definition}{\paragraph{Definition:}}{\hfill}
+	\newenvironment{problem}[2][Problem]{\begin{trivlist}
+	\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+	
+	\usepackage{pgfplots}
+	\usetikzlibrary{arrows}
+	\usetikzlibrary{decorations.markings}
+	\usetikzlibrary{datavisualization}
+	\usetikzlibrary{datavisualization.formats.functions}
+	%\usepackage{pstricks-add}
+	\setlength\parindent{24pt}
+	\makeatletter
+	\newcommand*{\toccontents}{\@starttoc{toc}}
+	\makeatother
+
+
+\begin{document}
+   \title{CS 70: Homework \#8}
+   \author{Abhijay Bhatnagar}
+   \maketitle
+   \toccontents
+
+\Question{Double-Check Your Intuition}
+
+\begin{enumerate}[label=\alph*.)]
+	\item
+	\begin{enumerate}[label=(\roman*)]
+		\item Let $X \sim \text{Bin} (5, 1 / 4)$. Let $Y$ be a random variable equal to $5 - X$. What are the distributions of $X$ and $Y$? 
+		\begin{solution} \
+		
+			X: $\mP[X=i] = \binom{5}{i}(1/4)^i(3/4)^{5-i}$ \\
+			$\implies \mP[X=0]= 243/1024$ \\
+			$\implies \mP[X=1]= 405/1024$ \\
+			$\implies \mP[X=2]= 270/1024$ \\
+			$\implies \mP[X=3]= 90/1024$ \\
+			$\implies \mP[X=4]= 15/1024$ \\
+			$\implies \mP[X=5]= 1/1024$ \\
+
+			Probability space of Y is simply a reverse of the probability space for X, i.e. 
+			
+			Y: $\mP[Y=i] = \mP[X=5-i]$ \\
+			$\implies \mP[Y=5]= 243/1024$ \\
+			$\implies \mP[Y=4]= 405/1024$ \\
+			$\implies \mP[Y=3]= 270/1024$ \\
+			$\implies \mP[Y=2]= 90/1024$ \\
+			$\implies \mP[Y=1]= 15/1024$ \\
+			$\implies \mP[Y=0]= 1/1024$ \\
+		\end{solution}
+		\item Let $Z$ be a random variable denoting the result of a die roll (so $1 \leq Z \leq 6$ uniformly at random). What is $E[Z^2]$?
+		\begin{solution}\
+		
+			$\mP[Z^2]=1/6(\sum_{i=1}^{6}i^2)=91/6$ 
+		\end{solution}
+	\end{enumerate}
+	
+	For each of the problems below, if you think the answer is "yes" then provide a proof. If you think the answer is "no", then provide a counterexample.
+
+	\item If $A$ and $B$ are integer-valued random variables such that for every integer $i$, $\Pr(A = i) = \Pr(B = i)$, then is $\Pr(A = B) > 0$?
+	\begin{solution}
+		Not necessarily. You could have equal probability events that have no chance of happening at the same time, i.e. rolling a dice on two numbers at the same time.
+	\end{solution}
+	\newpage
+	\item If $C$ is an integer-valued random variable, then is $E[C^2] = E[C]^2$?
+	\begin{solution}
+		No. Consider a dice roll, $E[C]=7/2,$ $E[C^2]=1/6(\sum_{i=1}^{6}i^2)=91/6$. In that case, $E[C^2] \not = E[C]^2$
+	\end{solution}
+	\item If $X$ and $Y$ are random variables and $E[X] > 100 E[Y]$, then is $\Pr(X > Y) > 1 / 100$?
+	\begin{solution}
+		No. Let X be a lottery roll where one ball out of a 1000 wins a \$1,000,001 cash prize, and the rest win nothing, giving an E[X] = 1000.001. Let Y be a separate lottery roll where every ball out of a 1000 win  \$10, giving an expected value E[Y] of 10. In this case, E[X] $>$ 100E[Y], but P($X > Y$) = 1/1000, which is less than 1/100.
+	\end{solution}
+	\item If $X$ and $Y$ are random variables taking positive values, then is $E[\frac{X}{X+Y}] = \frac{E[X]}{E[X+Y]}$?
+	\begin{solution}
+		No. Let X be an event that can take on the value of either 1 or 2 with equal probability ($\E[X]=1.5)$. Let Y be an event that can take on the value of either 1, 2, or 3 with equal probability ($\E[Y]=2)$. In this case, $\frac{\E[X]}{\E[X]+\E[Y]}=\frac{3}{7}$, while $\E[\frac{X}{X+Y}]=(1/2+1/3+1/4+2/3+2/4+2/5)\times 1/6=53/120$. The two are not equal.
+	\end{solution}
+	\item If $A, B, C$ are events such that $\Pr(A \cap B \cap C) = \Pr(A) \Pr(B) \Pr(C)$, then are $A, B, C$ mutually independent?
+	\begin{solution}
+		No. Let A and B be normal dice rolls, and let C be the event that either A or B roll above a 7 (on a normal 6-sided die). Pr(C) = 0, therefore $\Pr(A \cap B \cap C) = \Pr(A) \Pr(B) \Pr(C) = 0$, yet C is dependent on A and B.
+	\end{solution}
+	\item Is an event $A$ never independent with itself?
+	\begin{solution}
+		It can be independent of itself. For two events to be independent, $\Pr(A \cap B) = \Pr(A) \Pr(B)$. If Pr(A) and Pr(B) are both equal to 1 (or 0) (for all events), then the previous equality holds.
+	\end{solution}
+	\newpage
+	\item If $A$ and $B$ are independent events, then are $\overline{A}$ and $\overline{B}$ independent?
+	\begin{solution}
+		Yes. 
+		\begin{align*}
+			\mP[\bar{A}\cap \bar{B}]&=1-\mP[A\cup B] \\
+			&= 1-\mP[A]-\mP[B]+\mP[A\cap B]  \\
+			&= 	1-\mP[A]-\mP[B]+\mP[A]\mP[B]  \\
+			&= 	(1-\mP[A])(1-\mP[B]) \\
+			&= 	\mP[\bar A]\times \mP[\bar B] \\
+		\end{align*}
+		...which is the definition of independence.
+	\end{solution}
+\end{enumerate}
+
+
+
+\Question{Airport Revisited}
+
+\begin{enumerate}[label=\alph*.)]
+
+\item Suppose that there are $n$ airports arranged in a circle. A plane departs from each airport, and randomly chooses an airport to its left or right to fly to. What is the expected number of empty airports after all planes have landed?
+\begin{solution}
+%	Start by finding the probability that an airport has an airplane. $\mP[A]=
+	Let $Y_n$ be the number of empty bins (airports). $Y_n=I_1 + I_2 +...+ I_n$, where $I_n$ is the indicator r.v. of "bin $i$ is empty." 
+	
+	$E[I_i] = \mP[I_i=1]=\mP[$bin $i$ is empty$]=(1/2)^2$ (neither plane on its left or its right chose to fly to it).
+	
+	${E[Y_n]}=\sum_{i=1}^{n}{E[I_i]}=n(1/2)^2=\frac{n}{4}$.
+\end{solution}
+
+\item Now suppose that we still have $n$ airports, but instead of being arranged in a circle, they form a general graph, where each airport is denoted by a vertex, and an edge between two airports indicates that a flight is permitted between them. There is a plane departing from each airport and randomly chooses a neighboring destination where a flight is permitted. What is the expected number of empty airports after all planes have landed? (Express your answer in terms of $N(i)$ - the set of neighboring airports of airport $i$, and $\deg(i)$ - the number of neighboring airports of airport $i$).
+\begin{solution} Let $Y_n$ be the number of empty airports. $Y_n=I_1 + I_2 +...+ I_n$, where $I_n$ is the indicator r.v. of "bin $i$ is empty." 
+
+	$E[I_i] = \mP[I_i=1]=\mP[$bin $i$ is empty$]=\prod_{j\in N(i)}{(1-\frac{1}{deg(j)})}$ (for all of the neighbors of $i$, the probability the plane doesn't fly from neighbor $j$ to $i$ is 1 minus the probability it flies to $i$, which is just 1/degree j).
+	
+	${E[Y_n]}=\sum_{i=1}^{n}{E[I_i]}=\sum_{i=1}^{n}{\prod_{j\in N(i)}{(1-\frac{1}{deg(j)})}}$.
+\end{solution}
+\end{enumerate}
+
+
+\Question{Fizzbuzz}
+
+\begin{enumerate}[label=\alph*.)]
+\item Fizzbuzz is a classic software engineering interview question. You are given a natural number $n$, and for each integer $i$ from $1$ to $n$ you have to print either "fizzbuzz" if $i$ is divisible by $15$, "fizz" if $i$ is divisible by $3$ but not $15$, "buzz" if $i$ is divisible by $5$ but not $15$, or the integer itself if $i$ is not divisible by $3$ or $5$.
+
+If $n$ is a multiple of $15$, then how many printed lines will contain an integer?
+
+(Hint: If you pick a line uniformly at random, then what is the probability that the printed line contains an integer?)
+\begin{solution} Let $Y_n$ be the number of lines containing integers. $Y_n=I_1 + I_2 +...+ I_n$, where $I_k$ is the indicator r.v. of "line $k$ being an integer."
+
+	$\E[I_n]=\mP[$bin n is not a string$]=(1-1/3)(1-1/5)=8/15$ (corresponding to probability of not being divisible by either number).
+	
+	$\E[Y_n]=\sum_{i=1}^{n}{E[I_i]}=\sum_{i=1}^{n}{8/15}={8\times \frac{n}{15}}$.
+	
+\end{solution}
+	\item Recall the Euler totient function from Homework 4: $$\phi(n) = \left| \{ i : 1 \leq i \leq n, \texttt{gcd} (i, n) = 1 \} \right|.$$ Suppose $n = p_1^{\alpha_1} p_2^{\alpha_2} \cdots p_k^{\alpha_k}$ where $p_1, p_2, \ldots, p_k$ are distinct primes and $\alpha_1, \alpha_2, \ldots, \alpha_k$ are positive integers. Prove that $$\frac{\phi(n)}{n} = \prod_{j = 1}^k \left( 1 - \frac{1}{p_j} \right)$$
+
+\begin{solution}
+	$\phi(n)$ is the number of relatively prime numbers to $n$, which is effectively the number of lines that had integers printed on them in part (a). The statement $\frac{\phi(n)}{n}$ is equivalent to "what is the probability that a random line picked contains an integer" or more accurately, what is the probability that a random integer within the bounds is relatively prime to n.
+	
+	Using similar logic to part (a), we can derive that the $\mP[$not divisible by $p_i]=1-\frac{1}{p_i}$, and the probability that you're not divisible by all $k$ primes = $\prod_{j = 1}^k \left( 1 - \frac{1}{p_j} \right)$.
+\end{solution}
+
+\end{enumerate}
+
+
+
+\Question{Cliques in Random Graphs}
+
+Consider a graph $G = (V,E)$ on $n$ vertices which is generated by the following random process: for each pair of vertices $u$ and $v$, we flip a fair coin and place an (undirected) edge between $u$ and $v$ if and only if the coin comes up heads. So for example if $n = 2$, then with probability $1/2$, $G = (V,E)$ is the graph consisting of two vertices connected by an edge, and with probability $1/2$ it is the graph consisting of two isolated vertices.
+
+\begin{enumerate}[label=\alph*.)]
+\item What is the size of the sample space?
+\begin{solution}
+	$2^{\frac{n(n-1)}{2}}$. The total possible number of edges is equivalent to a fully connect n-vertex graph, and you can convert those edges into a binary string of length $\frac{n(n-1)}{2}$, which has 2 possible positions for every bit.
+\end{solution}
+\item A $k$-clique in graph is a set of $k$ vertices which are pairwise adjacent (every pair of vertices is connected by an edge). For example a $3$-clique is a triangle. What is the probability that a particular
+set of $k$ vertices forms a $k$-clique?
+\begin{solution}
+	${\binom n k}\times \frac{1}{2^{\frac{k(k-1)}{2}}}$. You can pick the k vertices, and only one combination of edges gives you a complete graph of those k vertices.
+\end{solution}
+
+\item Prove that ${n \choose k} \le n^k$.
+\textit{Optional:} Can you come up with a combinatorial proof? Of course, an algebraic proof would also get full credit.
+
+\begin{solution}
+$n \choose k$ = $\frac{n!}{(n-k)!k!}$. The factorial function is only defined for nonnegative numbers, and combination function is 0 when $n > k$ (which is trivially $\leq n^k$), therefore we know that for $1<k<n$, $\frac{n!}{(n-k)!k!} < n!$. Now when $k=n$, $n \choose k$
+\end{solution}
+
+
+\item Prove that the probability that the graph contains a $k$-clique, for $k \geq 4{\log n}+1$, is at most
+$1/n$. (The log is taken base 2).
+
+	\textit{Hint:} Apply the union bound and part (c).
+\begin{solution}
+	$\frac{1}{2^{\frac{k(k-1)}{2}}}$ is maximized when $k=4\log{n} + 1$. Using the solution from part (b) as our individual $\mP[A_i]$, we can set an upper bound for the combinatorial part of that equation using the fact that $\binom n k \leq n!$, the value we get for the fractional part of that equation after plugging in our maximizing $k$ value, and using the union bound to determine that the upper bound is the sum of all $mP[A_i]$.
+\end{solution}
+
+\end{enumerate}
+
+
+\Question{Balls and Bins, All Day Every Day}
+
+You throw $n$ balls into $n$ bins uniformly at random, where $n$ is a positive \emph{even} integer.
+\begin{enumerate}[label=\alph*.)]
+    \item What is the probability that exactly $k$ balls land in the first bin, where $k$ is an integer $0 \le k \le n$?
+	\begin{solution}
+		$\left(\frac{1}{n}\right)^k\times\left(1-\frac{1}{n}\right)^{n-k}$. Each ball has a $1/n$ probability of landing in the first bin, and a $(1-1/n)$ probability of landing elsewhere.
+	\end{solution}
+    \item What is the probability $p$ that at least half of the balls land in the first bin?
+    (You may leave your answer as a summation.)
+	\begin{solution}
+		$$p=\sum_{k=n/2}^{n}{\left(\frac{1}{n}\right)^k \left(1-\frac{1}{n}\right)^{n-k}}$$
+		
+		It is the sum of probabilities of all cases of $k\geq n/2$ landing in first bin.
+	\end{solution}
+    \item Using the union bound, give a simple upper bound, in terms of $p$, on the probability that some bin contains at least half of the balls.
+	\begin{solution}$n\times p$.
+	
+	
+		$\mP[$some bin contains at least half of the balls$]$
+		
+		$\leq \sum_{i=0}^{n}{\mP[\text{bin $i$ contains at least half of the balls}]}$
+		
+		$\leq n\times p$
+	\end{solution}
+    \item What is the probability, in terms of $p$, that at least half of the balls land in the first bin, or at least half of the balls land in the second bin?
+   	\begin{solution} Let A be the event at least half the balls go into the first bin, and B be the event at least half the balls go into the second bin.
+   	
+   	\begin{align*} \mP[A\cup B] &= 2p - \mP[A\cap B] \\
+   	&= 2p - \mP[A]\mP[B|A] \\
+   	&= 2p- \left[\left(\frac{1}{n}\right)^{n/2} \left(1-\frac{1}{n}\right)^{n/2}\right]\times \left[\left(\frac{1}{n}\right)^{n/2}\right]
+   	\end{align*}
+   	
+   	The ugly little bit on the bottom is the case that half the balls are in bin 1 times the probability that half the balls are in bin 2.   	
+   	\end{solution}
+
+    \item After you throw the balls into the bins, you walk over to the bin which contains the first ball you threw, and you randomly pick a ball from this bin.
+    What is the probability that you pick up the first ball you threw?
+    (Again, leave your answer as a summation.)
+
+	\begin{solution}
+		
+	\end{solution}
+\end{enumerate}
+
+\end{document}

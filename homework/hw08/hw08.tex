@@ -1,0 +1,339 @@
+\documentclass[11pt, notitlepage]{article}
+
+	\usepackage[margin=1in]{geometry}
+	\usepackage{amsmath,amsthm,amssymb,amsfonts}
+	\usepackage{enumitem}
+	\usepackage{systeme}
+
+	\newcommand{\N}{\mathbb{N}}
+	\newcommand{\Z}{\mathbb{Z}}
+	\newcommand{\R}{\mathbb{R}}
+	\newcommand{\A}{\alpha}
+	\newcommand{\ora}[1]{\overrightarrow{#1}}
+	\newcommand{\Question}[1]{\newpage\section{#1}}
+	\newcommand*{\Perm}[2]{{}^{#1}\!P_{#2}}%
+	\newcommand*{\Comb}[2]{{}^{#1}C_{#2}}%
+	\usepackage[parfill]{parskip}
+	\usepackage{mathtools}
+	\newenvironment{solution}{\paragraph{Solution:}}{\hfill}
+	\newenvironment{theorem}{\paragraph{Theorem:}}{\hfill}
+	\newenvironment{subtheorem}[1]{\paragraph{\small Subtheorem #1:}}{\hfill}
+	\newenvironment{definition}{\paragraph{Definition:}}{\hfill}
+	\newenvironment{problem}[2][Problem]{\begin{trivlist}
+	\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+	
+	\usepackage{pgfplots}
+	\usetikzlibrary{arrows}
+	\usetikzlibrary{decorations.markings}
+	\usetikzlibrary{datavisualization}
+	\usetikzlibrary{datavisualization.formats.functions}
+	%\usepackage{pstricks-add}
+	\setlength\parindent{24pt}
+	\makeatletter
+	\newcommand*{\toccontents}{\@starttoc{toc}}
+	\makeatother
+
+
+\begin{document}
+   \title{CS 70: Homework \#8}
+   \author{Abhijay Bhatnagar}
+   \maketitle
+   \toccontents
+
+%\setcounter{secnumdepth}{0} %% no numbering
+\Question{Counting, Counting, and More Counting}
+
+The only way to learn counting is to practice, practice, practice, so
+here is your chance to do so.
+For this problem, you do not need to show work that justifies your answers.
+We encourage you to leave your answer as an expression (rather than
+trying to evaluate it to get a specific number).
+
+For all solutions, let:
+
+ $\Perm{n}{k}=\frac{n!}{(n-k)!}$ - permutation 
+
+$\binom nk=\Comb{n}{k}=\frac{n!}{k!(n-k)!}$ - combination  
+
+
+\begin{enumerate}[label=\alph*.)]
+%\item How many 10-bit strings are there that contain exactly 4 ones?
+
+\item How many ways are there to arrange $n$ 1s and $k$ 0s into a sequence?
+\begin{solution}
+	$\Comb{n+k}{n}$ (equivalently $\Comb{n+k}{k}$)
+\end{solution}
+\item A bridge hand is obtained by selecting 13 cards from a standard
+  52-card deck. The order of the cards in a bridge hand is
+  irrelevant. \\
+  How many different 13-card bridge hands are there? 
+  How many different 13-card bridge hands are there that contain
+  no aces? How many different 13-card bridge hands are there that contain
+  all four aces? How many different 13-card bridge hands are there that contain
+  exactly 6 spades?
+\begin{solution}
+	There are $\binom{52}{13}$ different hands. There are  $\binom{48}{13}$ different hands with no aces. There are $\binom{48}{9}$ different hands with 4 aces. There are $\binom{40}{7}$ hands with exactly 6 spades.
+\end{solution}
+
+\item Two identical decks of 52 cards are mixed together, yielding a
+  stack of 104 cards.
+  How many different ways are there to order this stack of 104 cards?
+ \begin{solution}
+	$\frac{104!}{52\times 2!}$
+\end{solution}
+
+\item How many 99-bit strings are there that contain more ones than
+  zeros?
+\begin{solution}
+	$\sum_{n=50}^{99} \Comb{99}{n}$
+\end{solution}
+  
+\item An anagram of FLORIDA is any re-ordering of the letters of FLORIDA, i.e., any
+  string made up of the letters F, L, O, R, I, D, and A, in any order.
+  The anagram does not have to be an English word. \\
+  How many different anagrams of FLORIDA are there? How many different anagrams 
+  of ALASKA are there? How many different anagrams of ALABAMA are there? 
+  How many different anagrams of MONTANA are there?
+\begin{solution}
+	There are 7! anagrams of FLORDIA. There $\frac{6!}{3!}$ anagrams of ALASKA. There $\frac{7!}{4!}$ anagrams of ALABAMA. There $\frac{7!}{2!2!}$ anagrams of ALABAMA. 
+\end{solution}
+\newpage
+\item How many  different anagrams of ABCDEF are there if: (1) C is the left neighbor of E; (2) C is on the left of E (and not necessarily E's neighbor)
+\begin{solution}\
+	\begin{enumerate}[label=(\arabic*):]
+	\item 6!
+	\item 7!/2
+	\end{enumerate}
+\end{solution}
+
+\item We have 9 balls, numbered 1 through 9, and 27 bins.
+  How many different ways are there to distribute these 9 balls among
+  the 27 bins? Assume the bins are distinguishable (e.g., numbered 1
+  through 27).
+\begin{solution}
+	$\Perm{54}{9}$. We can represent each bin as a binary string, and place nine 1s.
+\end{solution}
+  
+\item We throw 9 identical balls into 7 bins.
+  How many different ways are there to distribute these 9 balls among
+  the 7 bins such that no bin is empty? Assume the bins are
+  distinguishable (e.g., numbered 1 through 7).
+\begin{solution}
+	$27^9$. 
+\end{solution}
+  
+\item How many different ways are there to throw 9 identical balls
+  into 27 bins? Assume the bins are distinguishable (e.g., numbered 1
+  through 27).
+\begin{solution}
+	$\Comb{54}{9}$. We can represent each bin as a binary string, and place nine 1s.
+\end{solution}
+ 
+\item There are exactly 20 students currently enrolled in a class.
+  How many different ways are there to pair up the 20 students, so
+  that each student is paired with one other student?
+\begin{solution}
+	$\Comb{20}{2}$. We have to create twenty pairs, and they are order independent.
+\end{solution}
+
+% \item Let (1, 1) be the bottom-left corner and (8, 8) be the upper-right 
+% corner of a chessboard. If you are allowed to move one square at a time and
+% can only move up or right, what is the number of ways to go from the bottom-left corner to 
+% the upper-right corner? 
+
+% \item What is the number of ways to go from the bottom-left corner to 
+% the upper-right corner of the chesssboard, if you must pass through the square 
+% (6, 2), where $(i, j)$ represents the square in the $i$th row from the
+% bottom and the $j$th column from the left? (Again, you are only allowed to move up or right.)
+  
+\item How many solutions does $x_0 + x_1 + \cdots + x_k = n$ have, if each $x$ must be a non-negative integer?
+\begin{solution}
+	$\Comb{n+k}{k}$
+\end{solution}
+\item How many solutions does $x_0 + x_1 = n$ have, if each $x$ must be a \emph{strictly positive} integer?
+\begin{solution}
+	$n-1$.
+\end{solution}
+\item How many solutions does $x_0 + x_1 + \cdots + x_k = n$ have, if each $x$ must be a \emph{strictly positive} integer?
+\begin{solution}
+	$\Comb{n-1}{k}$
+\end{solution}
+\end{enumerate}
+
+
+\Question{Binomial Beads}
+
+\begin{enumerate}[label=\alph*.)]
+    \item
+    Alistair is making school spirit keychains, which consist of a sequence of $n$ beads on a string. He has blue beads and gold beads. How many unique keychains can he make with exactly $k \leq n$ blue beads?
+	\begin{solution}
+		$\Comb{n}{k}$
+	\end{solution}
+    \item 
+    Alistair decides to sell his keychains! He decides on the following pricing scheme:
+    \begin{itemize}
+    	\item Blue beads have a value of $x$
+    	\item Gold beads have a value of $y$
+    	\item The price of a keychain is the product of the values of all of its beads.
+    \end{itemize}
+    What is the price of a keychain with exactly $k \leq n$ blue beads?
+	\begin{solution}
+		$x^k \times y^{(n-k)}$
+	\end{solution}
+    \item
+    Alistair decides to make exactly one of every possible unique keychain. If he sells every keychain he creates, how much revenue will he make? Use parts (a) and (b), and leave your answer in summation form.
+	\begin{solution}
+		\[\sum_{k=0}^{n}{\Comb{n}{k}[x^k y^{n-k}]}\]
+	\end{solution}
+    \item Draw a connection between part (c) and the binomial theorem.
+    \[(x+y)^n = \sum_{k=0}^n {n \choose k} x^ky^{n-k}\]
+\end{enumerate}
+
+    \textit{Hint: How do you calculate the product (x + y)(x + y)?}
+	\begin{solution}
+		You calculate the product of (x + y)(x + y) either through traditional term by term products or through binomial expansion. Using the term by term expansion, we can see the product is $x^2 + xy + yx + y^2$, which just happens to be term by term the prices of different beads with $n=2$. By induction, we can see that this term by term relationship will hold for an arbitrary $n$. Proving for $n+1$ is simply recognizing that the new options are all of the old options with an extra blue bead, and all of the old options with an extra gold beads, which implies the new total price would be: [old price]$x$ + [old price]$y$ = [old price](x+y) = $(x+y)^n (x+y) = (x+y)^{n+1}$, which completes the inductive proof.
+		\end{solution}
+
+\Question{Minesweeper}
+
+Minesweeper is a game that takes place on a grid of squares. When you click a square, it disappears to reveal either an integer $\in [1,8]$, a mine, or a blank space. If it reveals a mine, you instantly lose. If it reveals a number, that number refers to the number of mines adjacent to that square (including diagonally adjacent). If it reveals a blank space, there were 0 mines adjacent to it.
+
+You are playing on a 8x8 board with 10 mines randomly distributed across the board. In your first move, you click a square near the center of the board.
+
+\begin{enumerate}[label=(\alph*)]
+	\item What is the probability that the square reveals...
+	\begin{enumerate}[label=\roman*.)]
+		\item a mine?
+		\begin{solution}
+			$\frac{10}{64}$
+		\end{solution}
+		\item a blank space?
+		\begin{solution}
+			$\frac{54!(64-9)!}{(54-9)!(64)!}$
+			
+			This comes from the probability that all 10 mines exist in the space outside of the 9 blocks, i.e. $\Comb{64-9}{10}/\Comb{64}{10}$.
+		\end{solution}
+		\item the number $k$?
+		\begin{solution}
+			$\frac{\Comb{64-9}{10-k}}{\Comb{64}{10}}*\Comb{8}{k}$
+			
+			This comes from the probability all 10-$k$ mines are outside the 9 blocks, and the amount of ways to rearrange the $k$ mines within the 9 blocks.
+		\end{solution}
+	\end{enumerate}
+
+	\item The first square you picked revealed the number $k$. For your next move, you want to minimize the probability of picking a mine. Should you pick a square adjacent to your first pick, or a different square? Your answer should depend on the value of $k$.
+	\begin{solution} For $k=1$, you should pick adjacent. For $k>1$, pick outside.
+	
+	P(pick mine adjacent) = $\frac{k}{8}$
+	
+	P(pick mine outside) = $\frac{10-k}{64-9}$
+	
+	P(pick mine outside) is smaller for $k>1$.
+		
+	\end{solution}
+	\newpage
+	\item Your first move resulted in the number 1. You pick the square to the right for your next move. What is the probability that this square reveals the number $4$?
+	\begin{solution} $\frac{4}{8}\times \frac{(10-1)! (64-9-3)!}{(10-1-3)!(64-9)!}=\frac{4}{8}\times \frac{9\times 8\times 7}{55\times 54\times 53}$.
+	
+	It's the probability of one of the four overlapping squares having a mines (1/4) times the probability of 3 mines being exactly to the right of the '4' tile.
+		
+	\end{solution}
+\end{enumerate}
+
+
+
+ 
+
+\Question{Playing Strategically}
+
+Bob, Eve and Carol bought new slingshots.  Bob is not very accurate hitting his target with probability $1/3$.  Eve is better, hitting her target with probability $2/3$. Carol never misses. They decide to play the following game:
+They take turns shooting each other. For the game to be fair, Bob starts first, then Eve and finally Carol.  Any player who gets shot has to leave the game. The last person standing wins the game. What is Bob's best course of action regarding his first shot?
+
+
+\begin{enumerate}[label=(\alph*)]
+
+
+
+
+
+\item Compute the probability of the event $E_1$ that Bob wins in a duel against Eve alone, assuming he shoots first.
+\begin{solution} 3/7.
+
+	P(B win given shoots firsts) = (1/3) + (1-1/3)(1-2/3)P(B win given shoots first) 
+	
+	$\implies$ P(B win given shoots firsts) = 3/7
+\end{solution}
+\item Compute the probability of the event $E_2$ that Bob wins in a duel against Eve alone, assuming he shoots second.
+	P(B win given shoots second) = (1-2/3)(1/3) + (1-1/3)(1-2/3)P(B win given shoots second) 
+	
+	$\implies$ P(B win given shoots firsts) = 1/7
+
+\item Compute the  probability of the same events for a duel of Bob against Carol.
+\begin{solution}\
+
+
+	P(B win given shoots first) = 1/3
+	
+	P(B win given he shoots second) = 0.0.
+\end{solution}
+
+\item Assuming that both Eve and Carol play rationally, conclude that Bob's best course of action is to shoot into the air (i.e., intentionally miss)! (Hint: What happens if Bob misses? What if he  doesn't?)
+\begin{solution}
+	Eve and Carol both have a significant advantage facing Bob one on one, so they would shoot each other, leaving Bob in a new situation to be 'shooting first' on a one on one, while if Bob shot first and did hit, he would then be in a situation where he is now shooting second, and his odds are significantly lesser.
+\end{solution}
+
+
+\end{enumerate}
+
+
+
+ 
+
+\Question{Weathermen}
+
+Tom is a weatherman in New York. On days when it snows, Tom correctly predicts the snow 70\% of the time. When it doesn't snow, he correctly predicts no snow 95\% of the time. In New York, it snows on 10\% of all days.
+
+\begin{enumerate}[label=(\alph*)]
+
+\item If Tom says that it is going to snow, what is the probability it will actually snow?
+\begin{solution} 13.4 percent.
+
+A = it snows, B =Tom says it will snow
+
+	P( A $\vert$ B) = $\frac{\text{P(A)} \cap \text{P(B)}}{\text{P(B)}}=\frac{\text{P(B}\vert \text{A)P(A)}} {\text{P(B)}}$
+	
+	$\text{P(B} \vert \text{A)}$ = 0.7
+	
+	$\text{P(A)}$ = 0.1
+	
+	P(B$\vert \bar A$) = 0.05
+	
+	$\text{P(B)}$ = $\text{P(B} \vert \text{A)}\text{P(A)}$ + P(B$\vert \bar A$)(1-P(A)) = (0.7)(0.1) + (0.05)(1-0.1) = 0.52
+	
+	P(A$\vert$B)=$\frac{(0.7)(0.1)}{0.52}=13.4\%$
+\end{solution}
+
+\item What is Tom's overall accuracy?
+\begin{solution}$\approx$12.9 \%.
+
+P(not A) = 0.9
+
+P(not B given not A) = 0.95
+
+P(not B given A) = 0.3
+
+P($\bar A | \bar B$) = P(not B $|$ not A)P(not A) / (P(not B $|$ not A)P(not A) + P(not B $|$ A)(1- P(not A)) = $\frac{(0.95)(0.9)}{(0.95)(0.9)+(0.3)(1-0.9)}=.966$
+
+Overall accuracy = P(A$|$B)*P($\bar A | \bar B$) = (0.134)(0.966) = .129
+
+\end{solution}
+\item Tom's friend Jerry is a weatherman in Alaska. Jerry claims that she is a better weatherman than Tom even though her overall accuracy is lower. After looking at their records, you determine that Jerry is indeed better than Tom at predicting snow on snowy days and sun on sunny days. How is this possible? 
+
+\textit{Hint: what is the weather like in Alaska?}
+\begin{solution}
+	This is possible because it is almost always snowing in Alaska, so the P(A)*P($\bar A$) term is lower in final overall accuracy product. In general, you can be more accurate overall, but if the weather is more random, you can be individually less accurate at predicting sunny or not.
+\end{solution}
+\end{enumerate}
+
+
+\end{document}

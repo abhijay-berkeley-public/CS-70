@@ -1,0 +1,195 @@
+\documentclass[11pt, notitlepage]{article}
+
+	\usepackage[margin=1in]{geometry}
+	\usepackage{amsmath,amsthm,amssymb,amsfonts}
+	\usepackage{enumitem}
+	\usepackage{systeme}
+
+	\newcommand{\N}{\mathbb{N}}
+	\newcommand{\Z}{\mathbb{Z}}
+	\newcommand{\R}{\mathbb{R}}
+	\newcommand{\E}{\mathbb{E}}
+	\newcommand{\mP}{\mathbb{P}}
+	\newcommand{\A}{\alpha}
+	\newcommand{\var}[1]{\text{Var}(#1)}
+	\newcommand{\cov}{\text{cov}}
+	\newcommand{\ora}[1]{\overrightarrow{#1}}
+	\newcommand{\Question}[1]{\newpage\section{#1}}
+	\newcommand*{\Perm}[2]{{}^{#1}\!P_{#2}}%
+	\newcommand*{\Comb}[2]{{}^{#1}C_{#2}}%
+	\usepackage[parfill]{parskip}
+	\usepackage{mathtools}
+	\newenvironment{solution}{\paragraph{Solution:}}{\hfill \vspace{10mm}}
+	\newenvironment{theorem}{\paragraph{Theorem:}}{\hfill}
+	\newenvironment{subtheorem}[1]{\paragraph{\small Subtheorem #1:}}{\hfill}
+	\newenvironment{definition}{\paragraph{Definition:}}{\hfill}
+	\newenvironment{problem}[2][Problem]{\begin{trivlist}
+	\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+	
+	\usepackage{pgfplots}
+	\usetikzlibrary{arrows}
+	\usetikzlibrary{decorations.markings}
+	\usetikzlibrary{datavisualization}
+	\usetikzlibrary{datavisualization.formats.functions}
+	%\usepackage{pstricks-add}
+%	\setlength\parindent{24pt}
+	\makeatletter
+	\newcommand*{\toccontents}{\@starttoc{toc}}
+	\makeatother
+
+
+\begin{document}
+   \title{CS 70: Homework \#11}
+   \author{Abhijay Bhatnagar}
+   \maketitle
+   \toccontents
+
+\Question{Random Cuckoo Hashing}
+
+Cuckoo birds are parasitic beasts. They are known for hijacking the nests of other bird species and evicting the eggs already inside. Cuckoo hashing is inspired by this behavior. In cuckoo hashing, when we get a collision, the element that was already there gets evicted and rehashed.
+
+We study a simple (but ineffective, as we'll see) version of cuckoo hashing, where all hashes are random. Let's say we want to hash $n$ pieces of data $D_1, D_2, \ldots, D_n$ into $n$ possible hash buckets labeled $1, \ldots, n$. We hash the $D_1, \ldots, D_n$ in that order. When hashing $D_i$, we assign it a random bucket chosen uniformly from $1, \ldots, n$. If there is no collision, then we place $D_i$ into that bucket. If there is a collision with some other $D_j$, we evict $D_j$ and assign it another random bucket uniformly from $1, \ldots, n$. (It is possible that $D_j$ gets assigned back to the bucket it was just evicted from!) We again perform the eviction step if we get another collision. We keep doing this until there is no more collision, and we then introduce the next piece of data, $D_{i + 1}$ to the hash table. 
+
+\begin{enumerate}[label=\alph*.)]
+\item What is the probability that there are no collisions over the entire process of hashing $D_1, \ldots, D_n$ to buckets $1, \ldots, n$? What value does the probability tend towards as $n$ grows very large? 
+\begin{solution}
+	Let $A_n$ = event that there are no collisions in $N$ buckets. \\ $\mP[A_n]=\frac{(n) \times (n-1) \times \dots \times (1)}{n^n}=\frac{n!}{n^n}$
+	
+	$\lim_{n\rightarrow \infty} \mP[A_n] = 0$ (the factorial is term by term less than $n^n$ for every term $<n$).
+\end{solution}
+\item Assume we have already hashed $D_1, \ldots, D_{n - 1}$, and they each occupy their own bucket. We now introduce $D_n$ into our hash table. What is the expected number of collisions that we'll see while hashing $D_n$? (\emph{Hint}: What happens when we hash $D_n$ and get a collision, so we evict some other $D_i$ and have to hash $D_i$? Are we at a situation that we've seen before?)
+\begin{solution}
+	Let $X$ be the number of collisions.
+	
+	
+	One method is an infinite geometric series:
+	$\sum_{i=0}^{\infty}{i\times (\frac{n-1}{n})^i}$, but I don't know how to solve that so let's skip that.
+	
+	The second method is to recognize that if it hits any of the $n-1$ occupied bins, it's the exact same problem after displacement:
+	
+	Therefore, $\E[X] = 1 + \mP[\text{collision}]\E[X] = 1 + \frac{n-1}{n}\E[X]$
+	$\implies \E[X] (1- \frac{n-1}{n})=1\implies\E[X]=n$
+\end{solution}
+\end{enumerate}
+
+
+
+\Question{Markov's Inequality and Chebyshev's Inequality}
+
+A random variable $X$ has variance $\var{X} = 9$ and expectation $\E[X]=2$. Furthermore, the value of $X$ is never greater than $10$. Given this information, provide either a proof or a counterexample for the following statements.
+
+\begin{enumerate}[label=\alph*.)]
+\item $\E[X^2] = 13$.\label{markov-chebyshev-part-a}
+\begin{solution} True.
+\begin{proof}
+		$\var{X}=\E[X^2]-\E[X]^2\implies \E[X^2]=\var{X}+\E[X]^2=9+2^2=13.$
+
+\end{proof}
+\end{solution}
+%\item $\Pr[X = 2] > 0$.
+%\nosolspace{1cm}
+%\item $\Pr[X \geq 2] = \Pr[X \leq 2]$.
+%\nosolspace{1cm}
+\item $\mP[X \leq 1] \leq 8/9$.
+\begin{solution} True.
+	\begin{proof}
+	Let $Y = 10 - X$. $Y$ is guaranteed to be nonnegative since $X\leq 10$. Therefore we can use Markov's Inequality on $Y$. $\mP[X\leq 1]$ is equivalent to $\mP[Y\geq (10-1)]=\mP[Y\geq 9]=\frac{\E[Y]}{9}$. We can find $\E[Y]=\E[10-X]=10-\E[X]=8$. Plugging this back in gives $\mP[X\leq 1]=\mP[Y\geq 9]=\frac{8}{9}$, as desired.
+\end{proof}
+
+\end{solution}
+\item $\mP[X \geq 6] \leq 9/16$.
+\begin{solution} True.
+\begin{proof}
+	Let $Y = (X-\mu)^2$. We know $\E[Y]=\var{X}$ and $\mP[X\geq 6]=\mP[X-\mu\geq 6-\mu]=\mP[Y\geq 4]=\frac{\E[Y]}{4^2}=\frac{\var{X}}{16}=\frac{9}{16}.$
+\end{proof}
+\end{solution}
+\item $\mP[X \geq 6] \leq 9/32$.
+\end{enumerate}
+
+
+
+
+\Question{Easy A's}
+
+A friend tells you about a course called ``Laziness in Modern Society'' that requires almost no work. You hope to take this course next semester to give yourself a well-deserved break after working hard in CS 70. At the first lecture, the professor announces that grades will depend only on two homework assignments. Homework 1 will consist of three questions, each worth 10 points, and Homework 2 will consist of four questions, also each worth 10 points. He will give an A to any student who gets at least 60 of the possible 70 points.
+
+However, speaking with the professor in office hours you hear some very disturbing news. He tells you that, in the spirit of the class, the GSIs are very lazy, and to save time the grading will be done as follows. For each student's Homework 1, the GSIs will choose an integer randomly from a distribution with mean $\mu = 5$ and variance $\sigma^2 = 1$. They'll mark each of the three questions with that score. To grade Homework 2, they'll again choose a random number from the same distribution, independently of the first number, and will mark all four questions with
+that score.
+
+If you take the class, what will the mean and variance of your total class score be? Use Chebyshev's inequality to conclude that you have less than a 5\% chance of getting an A when the grades are randomly chosen this way.
+
+\begin{solution}
+	
+	Let $T=$ total score of all problems, and $S_i$ = the score from the $i$th homework assignment. Each problem has the same distributions, i.e. $\E[S_i]=\mu=5$, and $\var{S_i}=1$. 
+	
+	Start by recognizing the score from each homework problem is independent from each other. This allows us to simplify some of the combined values:
+
+
+	\[\E[T]=\E[S_1 + ... + S_7]
+	=\sum_{i=1}^{7}{\E[S_i]}
+	=5\times 7 =35\]
+	$$\var{T}=\var{S_1 + ... + S_7}=\sum{\var{S_i}}=7$$
+	
+	From these, we can proceed to find the probability that you get an A, i.e. $\mP[T \geq 60]$. Let $Y=(T-\E[T])^2$, and we proceed with the stronger Chebyshev's Inequality:
+	\begin{align*}
+	\mP[T \geq 60] &= \mP[T-\mu \geq 60 - \mu]\\
+	&= \mP[T-\mu \geq 60 - 35]\\
+	&= \mP[Y \geq 25^2]\\
+	&\leq \frac{\var{T}}{25^2}\\
+	&\leq \frac{7}{25^2} \\
+	&<1.2\%\\
+	&<5\%
+	\end{align*}
+\end{solution}
+
+\Question{Confidence Interval Introduction}
+
+We observe a random variable $X$ which has mean $\mu$ and standard deviation $\sigma \in (0,\infty)$. Assume that the mean $\mu$ is unknown, but $\sigma$ is known.
+
+We would like to give a 95\% confidence interval for the unknown mean $\mu$. In other words, we want to give a random interval $(a, b)$ (it is random because it depends on the random observation $X$) such that the probability that $\mu$ lies in $(a,b)$ is at least 95\%.
+
+We will use a confidence interval of the form $(X - \varepsilon, X + \varepsilon)$, where $\varepsilon > 0$ is the width of the confidence interval. When $\varepsilon$ is smaller, it means that the confidence interval is narrower, i.e., we are giving a more \emph{precise} estimate of $\mu$.
+\begin{enumerate}[label=\alph*.)]
+    \item Using Chebyshev's Inequality, calculate an upper bound on $\Pr\{|X - \mu| \ge \varepsilon\}$.
+	\begin{solution}
+		Upper bound = $\frac{\var{X}}{\varepsilon^2}=\frac{\sigma^2}{\varepsilon^2}$
+	\end{solution}
+    \item Explain why $\Pr\{|X - \mu| < \varepsilon\}$ is the same as $\Pr\{\mu \in (X - \varepsilon, X + \varepsilon)\}$.
+	\begin{solution}
+		This is just the definition of absolute value. Consider the two cases:
+		\begin{enumerate}
+		\item $(X-\mu)$ is positive, then $ X - \mu < \varepsilon \implies X < \varepsilon + \mu \implies \mu > X -\varepsilon$
+		\item $(X-\mu)$ is negative, then $ X - \mu > -\varepsilon \implies X > -\varepsilon + \mu \implies \mu < X + \varepsilon$
+		\end{enumerate}
+	\end{solution}
+    \item Using the previous two parts, choose the width of the confidence interval $\varepsilon$ to be large enough so that $\Pr\{\mu \in (X-\varepsilon, X + \varepsilon)\}$ is guaranteed to exceed 95\%.
+
+    [Note: Your confidence interval is allowed to depend on $X$, which is observed, and $\sigma$, which is known. Your confidence interval is not allowed to depend on $\mu$, which is unknown.]
+    
+    \begin{solution}
+    	$1- \frac{\sigma^2}{\varepsilon^2}>0.95\implies 1-0.95 > \frac{\sigma^2}{\varepsilon^2} \implies \varepsilon > \frac{\sigma}{\sqrt{1-0.95}}$
+    \end{solution}
+    \newpage
+    
+    \item The previous three parts dealt with the case when you observe one sample $X$. Now, let $n$ be a positive integer and let $X_1,\dotsc,X_n$ be i.i.d.\ samples, each with mean $\mu$ and standard deviation $\sigma \in (0, \infty)$. As before, assume that $\mu$ is unknown but $\sigma$ is known.
+
+    Here, a good estimator for $\mu$ is the \emph{sample mean} $\bar X := n^{-1} \sum_{i=1}^n X_i$.
+    Calculate the mean and variance of $\bar X$.
+    \begin{solution}\
+    	
+    	$$\E[\bar{X}]=\E[n^{-1} \sum_{i=1}^n X_i]=n^{-1}\E[\sum_{i=1}^n X_i]=n^{-1}\sum_{i=1}^n\E[X_i]=\mu$$
+%    	= n^{-2} (n\times \sigma^2)=\frac{\sigma^2}{n}$
+    	$$\var{\bar{X}}=\var{n^{-1} \sum_{i=1}^n X_i}=n^{-2}\var{\sum_{i=1}^n X_i}=n^{-2}\sum_{i=1}^n\var{X_i}= n^{-2} (n\times \sigma^2)=\frac{\sigma^2}{n}$$
+    \end{solution}
+    \item We will now use a confidence interval of the form $(\bar X - \varepsilon, \bar X + \varepsilon)$ where $\varepsilon > 0$ again represents the width of the confidence interval. Imitate the steps of (a) through (c) to choose the width $\varepsilon$ to be large enough so that $\Pr\{\mu \in (\bar X-\varepsilon, \bar X + \varepsilon)\}$ is guaranteed to exceed 95\%.
+
+    To check your answer, your confidence interval should be \emph{smaller} when $n$ is larger. Intuitively, if you collect more samples, then you should be able to give a more \emph{precise} estimate of $\mu$.
+	\begin{solution}
+		Upper bound = $\frac{\var{\bar{X}}}{\varepsilon^2}=\frac{\sigma^2}{n\varepsilon^2}$.
+		
+		$\Pr\{\mu \in (\bar X-\varepsilon, \bar X + \varepsilon)\}=1-\frac{\sigma^2}{n\varepsilon^2} > 0.95 \implies \varepsilon > \frac{\sigma}{\sqrt{n(1-0.95)}}$
+	\end{solution}
+    % \item It's New Year's Eve, and you are re-evaluating your finances for the next year. You know that each month's expenditure (including each month in the future) is independently and identically distributed with a standard deviation of \$500. Over the past twelve months, you observed that you spent an average of \$1500 per month. How much money must your job make per month so that your income exceeds your mean monthly expenditures with probability at least 95\%? 
+\end{enumerate}
+
+\end{document}
